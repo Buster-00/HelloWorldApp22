@@ -10,17 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".SelectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
