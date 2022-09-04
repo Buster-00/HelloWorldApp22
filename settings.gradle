@@ -1,0 +1,8 @@
+include ':app'
+rootProject.name='HelloWorldApp'
+
+include ':openCV'
+
+include ':openCV'
+
+project(':openCV').projectDir = new File(opencvsdk + '/sdk')

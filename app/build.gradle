@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 31
+    buildToolsVersion "29.0.3"
+    defaultConfig {
+        applicationId "org.pytorch.helloworld"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+
+            cmake {
+//                cppFlags '-std=c++14'
+                arguments "-DANDROID_STL=c++_shared"
+            }
+            cmake {
+                cppFlags "-std=c++14 -frtti -fexceptions"
+                abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+                arguments "-DOpenCV_DIR=" + opencvsdk + "/sdk/native"
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+
+        sourceSets{
+            main{
+                jni{
+//                srcDirs "src/main/jinLibs"
+                    jniLibs.srcDirs = ['libs']
+                }
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+//            viewBinding true
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+//            version '3.18.1'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+    implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
+    implementation project(path: ':openCV',configuration:'default')
+
+//    implementation 'org.pytorch:pytorch_android:1.6.0'
+//    implementation 'org.pytorch:pytorch_android_torchvision:1.6.0'
+}
