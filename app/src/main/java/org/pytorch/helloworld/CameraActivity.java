@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -26,6 +27,9 @@ import camera.mCameraFragment;
 
 public class CameraActivity extends AppCompatActivity {
 
+    //Bundle to store the Uri
+
+
     //widget
     ImageView img_view_1;
     ImageView img_view_2;
@@ -38,6 +42,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        Bundle mBundle = new Bundle();
         //Initialize widget
         img_view_1 = findViewById(R.id.img_view_1);
         img_view_2 = findViewById(R.id.img_view_2);
@@ -111,6 +116,7 @@ public class CameraActivity extends AppCompatActivity {
         ft.replace(R.id.frg_1, cfg).commit();
     }
 
+    //get the bitmap rotation degree
     static public int getBitmapDegree(String path)
     {
         int degree = 0;
