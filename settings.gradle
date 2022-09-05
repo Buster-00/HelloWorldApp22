@@ -6,3 +6,4 @@ include ':openCV'
 include ':openCV'
 
 project(':openCV').projectDir = new File(opencvsdk + '/sdk')
+include ':cameralib'

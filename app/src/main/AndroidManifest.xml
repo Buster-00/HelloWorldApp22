@@ -13,7 +13,8 @@
         <activity
             android:name=".Camera2Activity"
             android:exported="false"
-            android:theme="@style/NoTitleTheme"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
         <activity android:name=".CameraActivity" />
         <activity android:name=".SelectActivity">
             <intent-filter>
