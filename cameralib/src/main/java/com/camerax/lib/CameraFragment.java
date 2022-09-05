@@ -24,6 +24,7 @@ import com.camerax.lib.core.OnFocusListener;
 import com.camerax.lib.core.OnImgAnalysisListener;
 import com.camerax.lib.core.SimpleAnimListener;
 
+
 /**
  * Copyright (C) 2017
  * 版权所有
@@ -129,17 +130,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener, On
             mTakePhotoBtn = view.findViewById(R.id.take_photo);
             mCancelBtn = view.findViewById(R.id.cancel);
             mSwitchCameraBtn = view.findViewById(R.id.switch_camera);
-            mCheckBtn = view.findViewById(R.id.check);
 
             mTakePhotoBtn.setOnClickListener(this);
             mCancelBtn.setOnClickListener(this);
             mSwitchCameraBtn.setOnClickListener(this);
-            mCheckBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().finish();
-                }
-            });
         }
 
         //top panel

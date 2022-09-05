@@ -11,10 +11,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".PostProcessActivity"
+            android:exported="false" />
+        <activity
             android:name=".Camera2Activity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".CameraActivity" />
         <activity android:name=".SelectActivity">
             <intent-filter>
