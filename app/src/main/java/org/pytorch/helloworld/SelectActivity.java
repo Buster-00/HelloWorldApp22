@@ -34,7 +34,7 @@ public class SelectActivity extends AppCompatActivity {
         btn_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SelectActivity.this, Camera2Activity.class);
+                Intent intent = new Intent(SelectActivity.this, CameraActivity.class);
                 startActivity(intent);
             }
         });

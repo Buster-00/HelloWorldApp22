@@ -14,10 +14,10 @@
             android:name=".PostProcessActivity"
             android:exported="false" />
         <activity
-            android:name=".Camera2Activity"
+            android:name=".CameraActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".CameraActivity" />
+
         <activity android:name=".SelectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

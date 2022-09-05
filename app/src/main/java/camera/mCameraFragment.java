@@ -2,7 +2,6 @@ package camera;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.annotation.Nullable;
 
 import com.camerax.lib.CameraFragment;
 
-import org.pytorch.helloworld.Camera2Activity;
 import org.pytorch.helloworld.PostProcessActivity;
 
 import com.camerax.lib.R;
