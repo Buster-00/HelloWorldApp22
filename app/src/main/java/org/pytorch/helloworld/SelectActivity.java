@@ -1,7 +1,9 @@
 package org.pytorch.helloworld;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -45,5 +47,11 @@ public class SelectActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void requestPermission()
+    {
+        String[] permissions = new String[]{Manifest.permission.CAMERA};
+        ActivityCompat.requestPermissions(this, permissions,100);
     }
 }

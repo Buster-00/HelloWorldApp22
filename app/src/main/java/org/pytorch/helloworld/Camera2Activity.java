@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ImageView;
 
 import com.camerax.lib.CameraConstant;
@@ -23,6 +24,7 @@ import com.camerax.lib.core.OnCameraListener;
 import java.io.FileNotFoundException;
 import org.pytorch.helloworld.CameraActivity;
 
+import camera.mCameraFragment;
 
 
 public class Camera2Activity extends AppCompatActivity {
@@ -47,7 +49,7 @@ public class Camera2Activity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        final CameraFragment cfg = new CameraFragment();
+        final mCameraFragment cfg = new mCameraFragment();
 
         CameraOption option = new CameraOption.Builder(ExAspectRatio.RATIO_16_9)
                 .faceFront(false)
