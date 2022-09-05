@@ -56,7 +56,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    protected int getBitmapDegree(String path)
+    static public int getBitmapDegree(String path)
     {
         int degree = 0;
         try {
@@ -84,7 +84,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     //rotate the bitmap
-    public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
+    static public Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
         Bitmap returnBm = null;
 
         Matrix matrix = new Matrix();
