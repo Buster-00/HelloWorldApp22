@@ -35,17 +35,6 @@
             android:text="Camera"
             android:textColor="@color/cardview_light_background" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_camera2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_default"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:background="@color/colorPrimary"
-            android:text="Camera2"
-            android:textColor="@color/cardview_light_background" />
-
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
