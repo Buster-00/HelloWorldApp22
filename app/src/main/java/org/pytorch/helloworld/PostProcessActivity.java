@@ -45,4 +45,9 @@ public class PostProcessActivity extends AppCompatActivity {
         img_1.setImageBitmap(bitmap);
 
     }
+
+    private void processPicture()
+    {
+
+    }
 }

@@ -11,13 +11,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".TestActivity"
+            android:exported="false" />
+        <activity
             android:name=".PostProcessActivity"
             android:exported="false" />
         <activity
             android:name=".CameraActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <activity android:name=".SelectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

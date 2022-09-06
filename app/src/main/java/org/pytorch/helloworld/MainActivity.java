@@ -57,14 +57,14 @@ public class MainActivity extends AppCompatActivity {
   private FloatBuffer mInputTensorBuffer;
   private int[] inputArray= new int[224*224]  ;
 
-  public native String stringFromJNI();
-  public native String validate(int x, int y);
+  public static native String stringFromJNI();
+  public static native String validate(int x, int y);
 
-  public native String testForNumcpp();
+  public static native String testForNumcpp();
 
   private  Mat imgHL1_original, imgHL2_original, imgHL1,imgHL2,imgRE1,imgRE2;
-  public native void registration(long imgHL1_addr, long imgHL2_addr,long imgRE1_addr, long imgRE2_addr);
-  public native void seamlessclone(long imgHL1_addr, long imgHL2_addr,long imgRE1_addr, long imgRE2_addr, long jim2_result);
+  public static native void registration(long imgHL1_addr, long imgHL2_addr,long imgRE1_addr, long imgRE2_addr);
+  public static native void seamlessclone(long imgHL1_addr, long imgHL2_addr,long imgRE1_addr, long imgRE2_addr, long jim2_result);
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

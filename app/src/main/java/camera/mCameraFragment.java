@@ -3,6 +3,7 @@ package camera;
 import static camera.CameraParam.getBitmapDegree;
 import static camera.CameraParam.rotateBitmapByDegree;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +25,7 @@ import androidx.annotation.Nullable;
 import com.camerax.lib.CameraFragment;
 
 import org.pytorch.helloworld.PostProcessActivity;
+import org.pytorch.helloworld.TestActivity;
 
 import com.camerax.lib.R;
 
@@ -53,9 +55,10 @@ public class mCameraFragment extends CameraFragment {
             public void onClick(View v) {
                 if(mbundle.getString(PICTURE_1) != null && mbundle.getString(PICTURE_2) != null)
                 {
-                    Intent intent = new Intent(getActivity(), PostProcessActivity.class);
+                    Intent intent = new Intent(getActivity(), TestActivity.class);
                     intent.putExtras(mbundle);
                     startActivity(intent);
+                    getActivity().finish();
                 }
                 else
                 {
