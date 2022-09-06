@@ -32,6 +32,10 @@ import com.camerax.lib.R;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/*
+    default size:4000x2250px
+ */
+
 public class mCameraFragment extends CameraFragment {
 
     //Define KEY

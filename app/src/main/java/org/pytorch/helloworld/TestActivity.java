@@ -42,6 +42,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 
 import camera.CameraParam;
 
@@ -222,6 +223,7 @@ public class TestActivity extends AppCompatActivity {
         Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 ,224,224,255);
         ImageView imageView = findViewById(R.id.image_view_1);
         imageView.setImageBitmap(bmp_mask_1);
+        Log.e("BitmapSize", bmp_mask_1.getWidth() + " " + bmp_mask_1.getHeight());
 
 
 /*
