@@ -43,6 +43,8 @@ import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import camera.CameraParam;
+
 public class TestActivity extends AppCompatActivity {
 
     //widget
@@ -165,7 +167,7 @@ public class TestActivity extends AppCompatActivity {
             String uriString_1 = getIntent().getExtras().getString(PICTURE_1);
             Uri uri_1 = Uri.parse(uriString_1);
             bitmap_import = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_1));
-
+            bitmap_import = CameraParam.fixBitmap(bitmap_import, uri_1.getPath());
 //      imgHL1_original = new Mat();
 //      Utils.bitmapToMat(bitmap_import,imgHL1_original);
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*768 , n*1024 , true ) ;
