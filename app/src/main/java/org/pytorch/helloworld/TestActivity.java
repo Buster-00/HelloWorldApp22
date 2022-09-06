@@ -51,6 +51,7 @@ public class TestActivity extends AppCompatActivity {
     //widget
     ProgressDialog progressDialog;
 
+    //load JNI
     static {
         System.loadLibrary("HelloWorldApp");
         System.loadLibrary("opencv_java4");
@@ -69,7 +70,10 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        //show process bar
         showProcessBar();
+
+        //create a new thread to process task
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -218,6 +222,7 @@ public class TestActivity extends AppCompatActivity {
 
         // getting tensor content as java array of floats
         final float[] tensor_array_1 = outputTensor_1.getDataAsFloatArray();
+        Log.e("Length of float arrya", String.valueOf(tensor_array_1.length));
 
         //convert java array to Bitmap
         Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 ,224,224,255);
