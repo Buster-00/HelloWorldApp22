@@ -1,5 +1,7 @@
 package org.pytorch.helloworld;
 
+import static camera.CameraParam.fixBitmap;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
@@ -30,6 +32,7 @@ public class PostProcessActivity extends AppCompatActivity {
 
         //uri path of the picture
         String img_1_path = bundle.getString(mCameraFragment.PICTURE_1);
+
         Log.e("picture path", img_1_path);
         Uri uri = Uri.parse(img_1_path);
         Bitmap bitmap = null;
@@ -38,6 +41,7 @@ public class PostProcessActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        bitmap = fixBitmap(bitmap, uri.getPath());
         img_1.setImageBitmap(bitmap);
 
     }

@@ -1,5 +1,8 @@
 package camera;
 
+import static camera.CameraParam.getBitmapDegree;
+import static camera.CameraParam.rotateBitmapByDegree;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -43,12 +47,21 @@ public class mCameraFragment extends CameraFragment {
     {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
+        //set check button
         view.findViewById(R.id.check).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PostProcessActivity.class);
-                intent.putExtras(mbundle);
-                startActivity(intent);
+                if(mbundle.getString(PICTURE_1) != null && mbundle.getString(PICTURE_2) != null)
+                {
+                    Intent intent = new Intent(getActivity(), PostProcessActivity.class);
+                    intent.putExtras(mbundle);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "need take two pictures.", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -121,52 +134,9 @@ public class mCameraFragment extends CameraFragment {
 
     }
 
-    //rotate the bitmap
-    static public Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
-        Bitmap returnBm = null;
-
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-
-        returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-
-        if (returnBm == null) {
-            returnBm = bm;
-        }
-
-        if(bm != returnBm)
-        {
-            bm.recycle();
-        }
-        return returnBm;
-
-    }
-
-    //get the bitmap rotation degree
-    static public int getBitmapDegree(String path)
-    {
-        int degree = 0;
-        try {
-            ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation)
-            {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    degree = 90;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    degree = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
-                    break;
-                default:
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return degree;
+    @Override
+    public void onCancel() {
+        super.onCancel();
+        getActivity().finish();
     }
 }
