@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class SelectActivity extends AppCompatActivity {
@@ -19,8 +20,8 @@ public class SelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select);
 
         //initialize widgets
-        Button btn_default = findViewById(R.id.btn_default);
-        Button btn_camera = findViewById(R.id.btn_camera);
+        FloatingActionButton btn_default = findViewById(R.id.btn_default);
+        FloatingActionButton btn_camera = findViewById(R.id.btn_camera);
 
         //Bind onClick function
         btn_default.setOnClickListener(new View.OnClickListener() {

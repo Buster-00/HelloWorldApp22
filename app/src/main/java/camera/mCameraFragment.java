@@ -84,6 +84,7 @@ public class mCameraFragment extends CameraFragment {
         super.onTaken(uri);
         //返回拍照图片uri
         Log.e("onTake", "take photo");
+        Toast.makeText(getActivity(), "successfully take one picture", Toast.LENGTH_SHORT).show();
 
         if(pic_counter == 0)
         {
