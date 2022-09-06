@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "org.pytorch.helloworld"
         minSdkVersion 21
@@ -59,6 +59,12 @@ dependencies {
     implementation 'org.pytorch:pytorch_android_lite:1.10.0'
     implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
     implementation project(path: ':openCV',configuration:'default')
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation project(path: ':cameralib')
+    implementation project(path: ':openCV')
+
+    //implementation 'com.github.yijiebuyi:TakePhotoX:v1.2.2'
 
 //    implementation 'org.pytorch:pytorch_android:1.6.0'
 //    implementation 'org.pytorch:pytorch_android_torchvision:1.6.0'

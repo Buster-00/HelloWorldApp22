@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.camerax.lib.core.CameraView
+        android:id="@+id/preview_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingClass" >
+
+
+    </com.camerax.lib.core.CameraView>
+
+    <com.camerax.lib.FocusImageView
+        android:id="@+id/focus_view"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        app:focus_fail_id="@drawable/ic_focus_failed"
+        app:focus_succ_id="@drawable/ic_focus_focused"
+        app:focusing_id="@drawable/ic_focus_focusing"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_panel"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="#33000000"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <ImageView
+            android:id="@+id/take_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_take_photo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ImageView
+            android:id="@+id/switch_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_replay_100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_camera_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <ImageView
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_check_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/top_panel"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#33000000"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/camera_func_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/camera_light_btn"
+                style="@style/CameraFlashLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:src="@drawable/ic_camera_close_light" />
+
+            <ImageView
+                android:id="@+id/camera_size_btn"
+                style="@style/CameraFlashLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:src="@drawable/ic_camera_size_switcher" />
+
+        </LinearLayout>
+
+
+        <include
+            android:id="@+id/camera_light"
+            layout="@layout/layout_camera_light"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/camera_size"
+            layout="@layout/layout_camera_size"
+            android:visibility="gone" />
+
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
