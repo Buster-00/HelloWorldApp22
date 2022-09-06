@@ -2,12 +2,15 @@ package org.pytorch.helloworld;
 
 import static org.opencv.imgproc.Imgproc.COLOR_RGBA2RGB;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
@@ -53,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
   }
 
+  //widget
+  ProgressDialog progressDialog;
+
   private SIFT sift = SIFT.create();
   private FloatBuffer mInputTensorBuffer;
   private int[] inputArray= new int[224*224]  ;
@@ -69,6 +75,118 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    showProgressDialog();
+    new Handler().post(new Runnable() {
+      @Override
+      public void run() {
+        processFunc();
+        progressDialog.dismiss();
+      }
+    });
+
+  }
+
+  /**
+   * Copies specified asset to the file in /files app directory and returns this file absolute path.
+   *
+   * @return absolute file path
+   */
+  public static String assetFilePath(Context context, String assetName) throws IOException {
+    File file = new File(context.getFilesDir(), assetName);
+    if (file.exists() && file.length() > 0) {
+      return file.getAbsolutePath();
+    }
+
+    try (InputStream is = context.getAssets().open(assetName)) {
+      try (OutputStream os = new FileOutputStream(file)) {
+        byte[] buffer = new byte[4 * 1024];
+        int read;
+        while ((read = is.read(buffer)) != -1) {
+          os.write(buffer, 0, read);
+        }
+        os.flush();
+      }
+      return file.getAbsolutePath();
+    }
+  }
+
+  private Bitmap floatArrayToBitmap(float[] floatArray, int width, int height, int alpha) {
+
+    // Create empty bitmap in RGBA format
+    Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    byte[] pixels = new byte[(width * height*4)];
+    alpha = 255;
+
+    // mapping smallest value to 0 and largest value to 255
+//    Arrays.sort(floatArray);
+    float maxValue = maximum(floatArray);// float)Collections.max(Arrays.asList(floatArray)) ? : 1.0f
+
+    float minValue = minimum(floatArray);
+    float delta = maxValue-minValue;
+
+    // Define if float min..max will be mapped to 0..255 or 255..0
+
+    // copy each value from float array to RGB channels and set alpha channel
+    for (int i=0; i<width * height; ++i) {
+      int tempValue=conversion(floatArray[i],minValue, delta);
+//      int tempValue=0;
+
+      pixels[i*4]=(byte)(tempValue&0xff);
+      pixels[i*4+1]=(byte)(tempValue&0xff);
+      pixels[i*4+2]=(byte)(tempValue&0xff);
+      pixels[i*4+3]=(byte)(alpha&0xff);
+    }
+//    bmp.setPixels(pixels, 0, width, 0, 0, width, height);
+    ByteBuffer BB = ByteBuffer.allocate(224*224*4);
+    BB.put(pixels);
+    BB.position(0);
+    bmp.copyPixelsFromBuffer(BB);
+
+    return bmp;
+  }
+  private  int conversion(float v, float minValue, float delta){
+    return Math.round(((v-minValue)/delta*255.0f));
+  }
+
+  public float maximum(float[] array) {
+    if (array.length <= 0)
+      throw new IllegalArgumentException("The array is empty");
+    float max = array[0];
+    for (int i = 1; i < array.length; i++)
+      if (array[i] > max)
+        max = array[i];
+    return max;
+  }
+
+  public float minimum(float[] array) {
+    if (array.length <= 0)
+      throw new IllegalArgumentException("The array is empty");
+    float min = array[0];
+    for (int i = 1; i < array.length; i++)
+      if (array[i] < min)
+        min = array[i];
+    return min;
+  }
+
+  public Bitmap sift(Bitmap inputImage) {
+    Mat rgba = new Mat();
+    Utils.bitmapToMat(inputImage, rgba);
+    MatOfKeyPoint keyPoints = new MatOfKeyPoint();
+    Imgproc.cvtColor(rgba, rgba, Imgproc.COLOR_RGBA2GRAY);
+    sift.detect(rgba, keyPoints);
+    Features2d.drawKeypoints(rgba, keyPoints, rgba);
+    Utils.matToBitmap(rgba, inputImage);
+//    imageView.setImageBitmap(inputImage);
+
+//    import org.pytorch.torchvision.TensorImageUtils;//
+
+//    TensorImageUtils.bitmapToFloat32Tensor()
+    return inputImage ;
+  }
+
+  private void processFunc()
+  {
     boolean success = OpenCVLoader.initDebug();
     String xx =stringFromJNI();
     String yy =validate(3,5);
@@ -120,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 //            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
 //    final float[] bmpArray = outputTensor.getDataAsFloatArray();
 
-/* make second mask */
+    /* make second mask */
 
 //    try {
 //      bitmap = BitmapFactory.decodeStream(getAssets().open("imageHL2_224.jpg"));
@@ -149,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
       int n=1;
 
       //"img_HL_1.jpg"
-     // "imageHL1_224.jpg"
+      // "imageHL1_224.jpg"
       bitmap_import = BitmapFactory.decodeStream(getAssets().open("img_HL_1.jpg"));
 //      imgHL1_original = new Mat();
 //      Utils.bitmapToMat(bitmap_import,imgHL1_original);
@@ -315,104 +433,12 @@ public class MainActivity extends AppCompatActivity {
 //    TextView textView = findViewById(R.id.text);
 //    textView.setText(className);
  */
-
   }
 
-  /**
-   * Copies specified asset to the file in /files app directory and returns this file absolute path.
-   *
-   * @return absolute file path
-   */
-  public static String assetFilePath(Context context, String assetName) throws IOException {
-    File file = new File(context.getFilesDir(), assetName);
-    if (file.exists() && file.length() > 0) {
-      return file.getAbsolutePath();
-    }
-
-    try (InputStream is = context.getAssets().open(assetName)) {
-      try (OutputStream os = new FileOutputStream(file)) {
-        byte[] buffer = new byte[4 * 1024];
-        int read;
-        while ((read = is.read(buffer)) != -1) {
-          os.write(buffer, 0, read);
-        }
-        os.flush();
-      }
-      return file.getAbsolutePath();
-    }
-  }
-
-  private Bitmap floatArrayToBitmap(float[] floatArray, int width, int height, int alpha) {
-
-    // Create empty bitmap in RGBA format
-    Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-    byte[] pixels = new byte[(width * height*4)];
-    alpha = 255;
-
-    // mapping smallest value to 0 and largest value to 255
-//    Arrays.sort(floatArray);
-    float maxValue = maximum(floatArray);// float)Collections.max(Arrays.asList(floatArray)) ? : 1.0f
-
-    float minValue = minimum(floatArray);
-    float delta = maxValue-minValue;
-
-    // Define if float min..max will be mapped to 0..255 or 255..0
-
-    // copy each value from float array to RGB channels and set alpha channel
-    for (int i=0; i<width * height; ++i) {
-      int tempValue=conversion(floatArray[i],minValue, delta);
-//      int tempValue=0;
-
-      pixels[i*4]=(byte)(tempValue&0xff);
-      pixels[i*4+1]=(byte)(tempValue&0xff);
-      pixels[i*4+2]=(byte)(tempValue&0xff);
-      pixels[i*4+3]=(byte)(alpha&0xff);
-    }
-//    bmp.setPixels(pixels, 0, width, 0, 0, width, height);
-    ByteBuffer BB = ByteBuffer.allocate(224*224*4);
-    BB.put(pixels);
-    BB.position(0);
-    bmp.copyPixelsFromBuffer(BB);
-
-    return bmp;
-  }
-  private  int conversion(float v, float minValue, float delta){
-    return Math.round(((v-minValue)/delta*255.0f));
-  }
-
-  public float maximum(float[] array) {
-    if (array.length <= 0)
-      throw new IllegalArgumentException("The array is empty");
-    float max = array[0];
-    for (int i = 1; i < array.length; i++)
-      if (array[i] > max)
-        max = array[i];
-    return max;
-  }
-
-  public float minimum(float[] array) {
-    if (array.length <= 0)
-      throw new IllegalArgumentException("The array is empty");
-    float min = array[0];
-    for (int i = 1; i < array.length; i++)
-      if (array[i] < min)
-        min = array[i];
-    return min;
-  }
-
-  public Bitmap sift(Bitmap inputImage) {
-    Mat rgba = new Mat();
-    Utils.bitmapToMat(inputImage, rgba);
-    MatOfKeyPoint keyPoints = new MatOfKeyPoint();
-    Imgproc.cvtColor(rgba, rgba, Imgproc.COLOR_RGBA2GRAY);
-    sift.detect(rgba, keyPoints);
-    Features2d.drawKeypoints(rgba, keyPoints, rgba);
-    Utils.matToBitmap(rgba, inputImage);
-//    imageView.setImageBitmap(inputImage);
-
-//    import org.pytorch.torchvision.TensorImageUtils;//
-
-//    TensorImageUtils.bitmapToFloat32Tensor()
-    return inputImage ;
+  private void showProgressDialog()
+  {
+    progressDialog = new ProgressDialog(this);
+    progressDialog.setTitle("Processing the image");
+    progressDialog.show();
   }
 }
