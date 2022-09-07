@@ -14,8 +14,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
@@ -48,6 +50,10 @@ import camera.CameraParam;
 
 public class TestActivity extends AppCompatActivity {
 
+    //width and heigh of bitmpa
+    public final int WIDETH_OF_BITMAP = 224;
+    public final int HEIGHT_OF_BITMAP = 224;
+
     //widget
     ProgressDialog progressDialog;
 
@@ -61,8 +67,6 @@ public class TestActivity extends AppCompatActivity {
     private SIFT sift = SIFT.create();
     private FloatBuffer mInputTensorBuffer;
     private int[] inputArray= new int[224*224]  ;
-
-
     private Mat imgHL1_original, imgHL2_original, imgHL1,imgHL2,imgRE1,imgRE2;
 
     @Override
@@ -92,108 +96,56 @@ public class TestActivity extends AppCompatActivity {
         String zz =testForNumcpp();
         Bitmap bitmap = null;
         Module module = null;
+
+        //Load high light detection model
         try {
-            // creating bitmap from packaged into app android asset 'image.jpg',
-            // app/src/main/assets/image.jpg
-//      bitmap = BitmapFactory.decodeStream(getAssets().open("image.jpg"));
-//      bitmap = BitmapFactory.decodeStream(getAssets().open("imageHL1_224.jpg"));
-            // loading serialized torchscript module from packaged into app android asset model.pt,
-            // app/src/model/assets/model.pt
-//      module = LiteModuleLoader.load(assetFilePath(this, "model.pt"));
-//      module = Module.load("high_light_detection.pt");
-//      module = LiteModuleLoader.load(assetFilePath(this, "high_light_detection.pt"));
-//      module = Module.load(assetFilePath(this, "model.pt"));
             module = LiteModuleLoader.load(assetFilePath(this, "high_light_detection1.pt"));
-//      Log.e("PytorchHelloWorld", "model.pt");
+            Log.e("PytorchHelloWorld", "model.pt");
         } catch (IOException e) {
             Log.e("PytorchHelloWorld", "Error reading assets", e);
             finish();
         }
-
-//    imageView.setImageBitmap(bitmap);
-
-//     preparing input tensor
-//    final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
-//        TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
-
-//    inputTensor.
-        // running the model
-//    final float[] inputArray = inputTensor.getDataAsFloatArray();
-//    int[] inputArray= new int[bitmap.getHeight()*bitmap.getWidth()]  ;
-//    bitmap.getPixels(inputArray,0,bitmap.getWidth(),0,0,bitmap.getWidth(),bitmap.getHeight());
-//    final  IValue[] iValue=module.forward(IValue.from(inputTensor)).toTuple();
-//    final Tensor outputTensor = iValue[0].toTensor();
-//    final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
-
-
-        // getting tensor content as java array of floats
-//    final float[] scores = outputTensor.getDataAsFloatArray();
-//    long[] shapeOfTensor = outputTensor.shape();
-
-        //convert java array to Bitmap
-//    Bitmap bmp=floatArrayToBitmap(scores,224,224,255);
-
-//    final Tensor bmpTensor = TensorImageUtils.bitmapToFloat32Tensor(bmp,
-//            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
-//    final float[] bmpArray = outputTensor.getDataAsFloatArray();
-
-        /* make second mask */
-
-//    try {
-//      bitmap = BitmapFactory.decodeStream(getAssets().open("imageHL2_224.jpg"));
-//    } catch (IOException e) {
-//      Log.e("PytorchHelloWorld", "Error reading assets", e);
-//      finish();
-//    }
-//    final Tensor inputTensor2 = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
-//            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
-//
-//    final  IValue[] iValue2=module.forward(IValue.from(inputTensor2)).toTuple();
-//    final Tensor outputTensor2 = iValue2[0].toTensor();
-//
-//    // getting tensor content as java array of floats
-//    final float[] scores2 = outputTensor2.getDataAsFloatArray();
-//
-//    //convert java array to Bitmap
-//    Bitmap bmp2=floatArrayToBitmap(scores2,224,224,255);
 
         /* ----make second mask*/
 
         Bitmap bitmap_import= null;
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         String time_last= "timestamp:" + format.format(new Date());
+
         try {
+            //define n = 1
             int n=1;
 
-            //"img_HL_1.jpg"
-            // "imageHL1_224.jpg"
-            //bitmap_import = BitmapFactory.decodeStream(getAssets().open("img_HL_1.jpg"));
-            /*change to uri image*/
+            /*import image from uri*/
             String uriString_1 = getIntent().getExtras().getString(PICTURE_1);
             Uri uri_1 = Uri.parse(uriString_1);
             bitmap_import = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_1));
+
+            //Restore the bitmap if the bitmap rotated
             bitmap_import = CameraParam.fixBitmap(bitmap_import, uri_1.getPath());
-//      imgHL1_original = new Mat();
-//      Utils.bitmapToMat(bitmap_import,imgHL1_original);
+
+            //Resize the bitmap
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*768 , n*1024 , true ) ;
             imgHL1 = new Mat();
             Utils.bitmapToMat(bitmap_import,imgHL1);
 
-            bitmap_import = BitmapFactory.decodeStream(getAssets().open("img_HL_2.jpg"));
-            /* Change to uri image*/
+            //save the bitmap
+            CameraParam.mSaveBitmap(bitmap_import, this);
+
+            //process second image
+            /*import image from uri*/
             String uriString_2 = getIntent().getExtras().getString(PICTURE_2);
             Uri uri_2 = Uri.parse(uriString_2);
             bitmap_import = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_2));
 
-
-//      imgHL2_original = new Mat();
-//      Utils.bitmapToMat(bitmap_import,imgHL2_original);
+            //Resize the bitmap2
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*768 , n*1024 , true ) ;
             imgHL2 = new Mat();
             Utils.bitmapToMat(bitmap_import,imgHL2);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 //    imgRE1,imgRE2
 //    int width = imgHL1_original.width();
 //    int height = imgHL1_original.height();
@@ -204,16 +156,18 @@ public class TestActivity extends AppCompatActivity {
         imgRE2 = new Mat();
 //    Imgproc.cvtColor(imgHL1 , imgHL1 ,  COLOR_RGBA2RGB);
 //    Imgproc.cvtColor(imgHL2 , imgHL2 ,  COLOR_RGBA2RGB);
+
         registration(imgHL1.getNativeObjAddr(), imgHL2.getNativeObjAddr(),imgRE1.getNativeObjAddr(),imgRE2.getNativeObjAddr());
 
         time_last += "\nre_end:" + format.format(new Date());
+
         // get imgRE1 and imgRE2 to yield to mask
         Bitmap img_out = Bitmap.createBitmap(imgRE1.cols(),imgRE1.rows(),Bitmap.Config.ARGB_8888);// = floatArrayToBitmap(scores,224,224,255);;
         Utils.matToBitmap(imgRE1,img_out);
         time_last += "\nmodel_begin:" + format.format(new Date());
 
         // use model to get the first mask
-        img_out = Bitmap.createScaledBitmap ( img_out , 224 , 224 , true ) ;
+        img_out = Bitmap.createScaledBitmap ( img_out , WIDETH_OF_BITMAP , HEIGHT_OF_BITMAP , true) ;
         final Tensor inputTensor_1 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
 
@@ -225,36 +179,33 @@ public class TestActivity extends AppCompatActivity {
         Log.e("Length of float arrya", String.valueOf(tensor_array_1.length));
 
         //convert java array to Bitmap
-        Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 ,224,224,255);
+        Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 ,WIDETH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
         ImageView imageView = findViewById(R.id.image_view_1);
         imageView.setImageBitmap(bmp_mask_1);
         Log.e("BitmapSize", bmp_mask_1.getWidth() + " " + bmp_mask_1.getHeight());
 
+        //second image
+        img_out = Bitmap.createBitmap(imgRE2.cols(),imgRE2.rows(),Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(imgRE2,img_out);
 
+        // use model to get the second mask
+        img_out = Bitmap.createScaledBitmap ( img_out , 224 , 224 , true ) ;
+        final Tensor inputTensor_2 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
+                TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
+
+        final  IValue[] iValue_2 = module.forward(IValue.from(inputTensor_2)).toTuple();
+        final Tensor outputTensor_2 = iValue_2[0].toTensor();
+
+        // getting tensor content as java array of floats
+        final float[] tensor_array_2 = outputTensor_2.getDataAsFloatArray();
+
+        //convert java array to Bitmap
+        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,224,224,255);
+        ImageView imageView2 = findViewById(R.id.img_view_2);
+        imageView2.setImageBitmap(bmp_mask_2);
 /*
-    img_out = Bitmap.createBitmap(imgRE2.cols(),imgRE2.rows(),Bitmap.Config.ARGB_8888);
-    Utils.matToBitmap(imgRE2,img_out);
-
-    // use model to get the second mask
-    img_out = Bitmap.createScaledBitmap ( img_out , 224 , 224 , true ) ;
-    final Tensor inputTensor_2 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
-            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
-
-    final  IValue[] iValue_2=module.forward(IValue.from(inputTensor_2)).toTuple();
-    final Tensor outputTensor_2 = iValue_2[0].toTensor();
-
-    // getting tensor content as java array of floats
-    final float[] tensor_array_2 = outputTensor_2.getDataAsFloatArray();
-
-    //convert java array to Bitmap
-
-
-    Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_1 ,224,224,255);
-    ImageView imageView = findViewById(R.id.image);
-//    imageView.setImageBitmap(bmp_mask_1);
-
-    Mat mat_mask1 = new Mat();
-    Mat mat_mask2 = new Mat();
+//    Mat mat_mask1 = new Mat();
+//    Mat mat_mask2 = new Mat();
 
 //    Bitmap bm_mask_224=null;
 //    try {
@@ -383,7 +334,6 @@ public class TestActivity extends AppCompatActivity {
         // mapping smallest value to 0 and largest value to 255
 //    Arrays.sort(floatArray);
         float maxValue = maximum(floatArray);// float)Collections.max(Arrays.asList(floatArray)) ? : 1.0f
-
         float minValue = minimum(floatArray);
         float delta = maxValue-minValue;
 

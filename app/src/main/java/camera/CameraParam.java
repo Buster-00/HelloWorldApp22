@@ -1,9 +1,14 @@
 package camera;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.os.Environment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CameraParam {
@@ -61,5 +66,29 @@ public class CameraParam {
     static public Bitmap fixBitmap(Bitmap bm, String path)
     {
         return rotateBitmapByDegree(bm, getBitmapDegree(path));
+    }
+
+    static public void mSaveBitmap(Bitmap bm, Context context)
+    {
+        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "001.jpg");
+        if(file.exists())
+        {
+            file.delete();
+        }
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            if(bm.compress(Bitmap.CompressFormat.JPEG, 100, out))
+            {
+                out.flush();
+                out.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
