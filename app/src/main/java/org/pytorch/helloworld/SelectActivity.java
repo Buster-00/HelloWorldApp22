@@ -2,9 +2,11 @@ package org.pytorch.helloworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +16,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class SelectActivity extends AppCompatActivity {
 
+    String[] permissions = new String[]{Manifest.permission.CAMERA};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
+
+        //request permission
+        requestPermission();
 
         //initialize widgets
         FloatingActionButton btn_default = findViewById(R.id.btn_default);
@@ -43,7 +50,9 @@ public class SelectActivity extends AppCompatActivity {
 
     private void requestPermission()
     {
-        String[] permissions = new String[]{Manifest.permission.CAMERA};
-        ActivityCompat.requestPermissions(this, permissions,100);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, permissions,100);
+        }
     }
 }

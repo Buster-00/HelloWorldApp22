@@ -1,10 +1,14 @@
 package org.pytorch.helloworld;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -13,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.camerax.lib.CameraConstant;
 import com.camerax.lib.core.CameraOption;
@@ -66,8 +71,5 @@ public class CameraActivity extends AppCompatActivity {
         //turn to camera fragment
         ft.replace(R.id.frg_1, cfg).commit();
     }
-
-
-
 
 }

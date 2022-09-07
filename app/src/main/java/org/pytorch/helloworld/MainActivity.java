@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
     //convert java array to Bitmap
     Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 ,224,224,255);
+    Log.e("MainActivity", bmp_mask_1.getWidth() + " " + bmp_mask_1.getHeight());
     ImageView imageView = findViewById(R.id.image);
     imageView.setImageBitmap(bmp_mask_1);
 /*
