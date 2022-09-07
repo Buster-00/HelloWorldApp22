@@ -187,6 +187,8 @@ public class TestActivity extends AppCompatActivity {
         //second image
         img_out = Bitmap.createBitmap(imgRE2.cols(),imgRE2.rows(),Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(imgRE2,img_out);
+        ImageView imageView2 = findViewById(R.id.img_view_2);
+        imageView2.setImageBitmap(img_out);
 
         // use model to get the second mask
         img_out = Bitmap.createScaledBitmap ( img_out , 224 , 224 , true ) ;
@@ -201,8 +203,8 @@ public class TestActivity extends AppCompatActivity {
 
         //convert java array to Bitmap
         Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,224,224,255);
-        ImageView imageView2 = findViewById(R.id.img_view_2);
-        imageView2.setImageBitmap(bmp_mask_2);
+//        ImageView imageView2 = findViewById(R.id.img_view_2);
+//        imageView2.setImageBitmap(bmp_mask_2);
 /*
 //    Mat mat_mask1 = new Mat();
 //    Mat mat_mask2 = new Mat();
