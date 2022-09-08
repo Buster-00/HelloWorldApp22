@@ -54,6 +54,8 @@ public class TestActivity extends AppCompatActivity {
     //width and heigh of bitmpa
     public final int WIDETH_OF_BITMAP = 224;
     public final int HEIGHT_OF_BITMAP = 224;
+    public final int WIDTH = 768;
+    public final int HEIGHT = 1024;
 
     //widget
     ProgressDialog progressDialog;
@@ -126,7 +128,7 @@ public class TestActivity extends AppCompatActivity {
             bitmap_import = CameraParam.fixBitmap(bitmap_import, uri_1.getPath());
 
             //Resize the bitmap
-            bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*1024 , n*768 , true ) ;
+            bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*WIDTH , n*HEIGHT , true ) ;
             imgHL1 = new Mat();
             Utils.bitmapToMat(bitmap_import,imgHL1);
             Mat imgHl1_2 = new Mat();
@@ -140,9 +142,10 @@ public class TestActivity extends AppCompatActivity {
             String uriString_2 = getIntent().getExtras().getString(PICTURE_2);
             Uri uri_2 = Uri.parse(uriString_2);
             bitmap_import = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_2));
+            bitmap_import = CameraParam.fixBitmap(bitmap_import, uri_2.getPath());
 
             //Resize the bitmap2
-            bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*768 , n*1024 , true ) ;
+            bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*WIDTH , n*HEIGHT , true ) ;
             imgHL2 = new Mat();
             Utils.bitmapToMat(bitmap_import,imgHL2);
         } catch (IOException e) {
