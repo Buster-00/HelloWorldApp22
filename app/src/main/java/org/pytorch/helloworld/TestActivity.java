@@ -46,16 +46,17 @@ import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
+import static org.pytorch.helloworld.Param.HEIGHT;
+import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
+import static org.pytorch.helloworld.Param.MODULE_NAME;
+import static org.pytorch.helloworld.Param.WIDETH_OF_BITMAP;
+import static org.pytorch.helloworld.Param.WIDTH;
 
 import camera.CameraParam;
 
 public class TestActivity extends AppCompatActivity {
 
-    //width and heigh of bitmpa
-    public final int WIDETH_OF_BITMAP = 224;
-    public final int HEIGHT_OF_BITMAP = 224;
-    public final int WIDTH = 768;
-    public final int HEIGHT = 1024;
+
 
     //widget
     ProgressDialog progressDialog;
@@ -102,7 +103,7 @@ public class TestActivity extends AppCompatActivity {
 
         //Load high light detection model
         try {
-            module = LiteModuleLoader.load(assetFilePath(this, "high_light_detection1.pt"));
+            module = LiteModuleLoader.load(assetFilePath(this, MODULE_NAME));
             Log.e("PytorchHelloWorld", "model.pt");
         } catch (IOException e) {
             Log.e("PytorchHelloWorld", "Error reading assets", e);
