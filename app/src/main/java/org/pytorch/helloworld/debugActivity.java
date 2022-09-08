@@ -4,7 +4,11 @@ import static org.pytorch.helloworld.MainActivity.registration;
 import static org.pytorch.helloworld.MainActivity.stringFromJNI;
 import static org.pytorch.helloworld.MainActivity.testForNumcpp;
 import static org.pytorch.helloworld.MainActivity.validate;
-
+import static org.pytorch.helloworld.Param.HEIGHT;
+import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
+import static org.pytorch.helloworld.Param.MODULE_NAME;
+import static org.pytorch.helloworld.Param.WIDETH_OF_BITMAP;
+import static org.pytorch.helloworld.Param.WIDTH;
 import static camera.mCameraFragment.PICTURE_1;
 import static camera.mCameraFragment.PICTURE_2;
 
@@ -14,15 +18,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 
-import org.opencv.imgproc.Imgproc;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -45,18 +46,10 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Vector;
-import static org.pytorch.helloworld.Param.HEIGHT;
-import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
-import static org.pytorch.helloworld.Param.MODULE_NAME;
-import static org.pytorch.helloworld.Param.WIDETH_OF_BITMAP;
-import static org.pytorch.helloworld.Param.WIDTH;
 
 import camera.CameraParam;
 
-public class TestActivity extends AppCompatActivity {
-
-
+public class debugActivity extends AppCompatActivity {
 
     //widget
     ProgressDialog progressDialog;
@@ -76,7 +69,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_debug);
 
         //show process bar
         showProcessBar();
@@ -121,11 +114,7 @@ public class TestActivity extends AppCompatActivity {
             int n=1;
 
             /*import image from uri*/
-            String uriString_1 = getIntent().getExtras().getString(PICTURE_1);
-            Uri uri_1 = Uri.parse(uriString_1);
-            bitmap_import = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_1));
-            bitmap_import = CameraParam.fixBitmap(bitmap_import, uri_1.getPath());
-
+            bitmap_import = BitmapFactory.decodeStream(getAssets().open("TestSample_3.jpg"));
 
             //Resize the bitmap
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*WIDTH , n*HEIGHT , true ) ;
@@ -138,12 +127,7 @@ public class TestActivity extends AppCompatActivity {
             CameraParam.mSaveBitmap(bitmap_import, this);
 
             //process second image
-            /*import image from uri*/
-            String uriString_2 = getIntent().getExtras().getString(PICTURE_2);
-            Uri uri_2 = Uri.parse(uriString_2);
-            bitmap_import = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_2));
-            bitmap_import = CameraParam.fixBitmap(bitmap_import, uri_2.getPath());
-
+            bitmap_import = BitmapFactory.decodeStream(getAssets().open("TestSample_4.jpg"));
 
             //Resize the bitmap2
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*WIDTH , n*HEIGHT , true ) ;
