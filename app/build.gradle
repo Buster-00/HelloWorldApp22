@@ -55,6 +55,7 @@ android {
 }
 
 dependencies {
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'org.pytorch:pytorch_android_lite:1.10.0'
     implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
@@ -63,7 +64,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(path: ':cameralib')
     implementation project(path: ':openCV')
+    implementation project(path: ':cropperLib')
 
+    //implementation 'com.edmodo:cropper:1.0.1'
     //implementation 'com.github.yijiebuyi:TakePhotoX:v1.2.2'
 
 //    implementation 'org.pytorch:pytorch_android:1.6.0'

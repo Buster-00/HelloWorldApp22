@@ -8,6 +8,7 @@
     tools:context=".SelectActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linear_layout"
         android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,10 +74,14 @@
 
         </FrameLayout>
 
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-
+    <Button
+        android:id="@+id/btn_crop"
+        android:text="CROP"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_layout"/>
 
 </RelativeLayout>
