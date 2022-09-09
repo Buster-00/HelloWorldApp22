@@ -30,6 +30,7 @@ public class SelectActivity extends AppCompatActivity {
         FloatingActionButton btn_default = findViewById(R.id.btn_default);
         FloatingActionButton btn_camera = findViewById(R.id.btn_camera);
         FloatingActionButton btn_debug = findViewById(R.id.btn_debug);
+        Button btn_crop = findViewById(R.id.btn_crop);
 
         //Bind onClick function
         btn_default.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +53,14 @@ public class SelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectActivity.this, debugActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelectActivity.this, CropActivity.class);
                 startActivity(intent);
             }
         });

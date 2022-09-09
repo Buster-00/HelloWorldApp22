@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+version = "2.0.0"
+group = "com.edmodo"
+
+android {
+
+    compileSdkVersion 33
+    buildToolsVersion '23.0.2'
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 33
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-annotations:28.0.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+signing {
+    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+task publishLocal(type: Upload) {
+    configuration = configurations.archives
+
+}
+
+

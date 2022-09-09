@@ -11,6 +11,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ConstraintActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CropActivity"
+            android:exported="false" />
+        <activity
             android:name=".debugActivity"
             android:exported="false" />
         <activity
