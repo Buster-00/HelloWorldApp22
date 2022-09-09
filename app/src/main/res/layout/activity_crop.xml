@@ -20,6 +20,14 @@
       android:id="@+id/btn_next"
       android:layout_below="@id/crop_view"/>
 
+  <TextView
+    android:layout_marginLeft="20dp"
+      android:id="@+id/tv_cordinate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/crop_view"
+      android:layout_toRightOf="@+id/btn_next"/>
+
   <ImageView
       android:id="@+id/img_view"
       android:layout_centerHorizontal="true"

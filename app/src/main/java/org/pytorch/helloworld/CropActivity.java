@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.edmodo.cropper.CropImageView;
 
@@ -26,6 +27,8 @@ public class CropActivity extends AppCompatActivity {
 
     //widget
     CropImageView cropImageView;
+    TextView tv_cordinate;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class CropActivity extends AppCompatActivity {
 
         //Initialize widget
         cropImageView = findViewById(R.id.crop_view);
+        tv_cordinate = findViewById(R.id.tv_cordinate);
+
         cropImageView.setAspectRatio(5, 10);
         cropImageView.setFixedAspectRatio(false);
         cropImageView.setGuidelines(1);
@@ -54,6 +59,7 @@ public class CropActivity extends AppCompatActivity {
             @Override
             public void onCrop(int cropX, int cropY, int cropWidth, int cropHeight) {
                 Log.e("cord", cropX + " " + cropY + " " + cropWidth + " " + cropHeight);
+                tv_cordinate.setText("(" + cropX + ", " + cropY + ", " + cropWidth + ", " + cropHeight + ")");
             }
         });
 
