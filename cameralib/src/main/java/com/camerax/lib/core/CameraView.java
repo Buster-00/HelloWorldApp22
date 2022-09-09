@@ -365,7 +365,8 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
                     rotation = Surface.ROTATION_0;
                 }
 
-                mImageCapture.setTargetRotation(rotation);
+                mImageCapture.setTargetRotation(Surface.ROTATION_0);
+                //mImageCapture.setTargetRotation(rotation);
             }
         };
 

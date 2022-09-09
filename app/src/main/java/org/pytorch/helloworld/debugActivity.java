@@ -115,16 +115,12 @@ public class debugActivity extends AppCompatActivity {
 
             /*import image from uri*/
             bitmap_import = BitmapFactory.decodeStream(getAssets().open("TestSample_3.jpg"));
-
             //Resize the bitmap
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*WIDTH , n*HEIGHT , true ) ;
             imgHL1 = new Mat();
             Utils.bitmapToMat(bitmap_import,imgHL1);
             Mat imgHl1_2 = new Mat();
             org.opencv.imgproc.Imgproc.cvtColor(imgHL1, imgHl1_2, Imgproc.COLOR_RGBA2GRAY);
-
-            //save the bitmap
-            CameraParam.mSaveBitmap(bitmap_import, this);
 
             //process second image
             bitmap_import = BitmapFactory.decodeStream(getAssets().open("TestSample_4.jpg"));
