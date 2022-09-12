@@ -11,6 +11,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".ConstraintActivity"
             android:exported="false" />
         <activity

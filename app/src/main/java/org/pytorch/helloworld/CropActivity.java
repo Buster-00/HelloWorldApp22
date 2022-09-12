@@ -5,6 +5,7 @@ import static camera.mCameraFragment.PICTURE_1;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,7 +23,11 @@ import com.edmodo.cropper.CropImageView;
 
 import org.pytorch.helloworld.R;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import javax.xml.transform.Result;
 
 import camera.CameraParam;
 import crop.OnCropListener;
@@ -76,6 +81,12 @@ public class CropActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bitmap croppedImage = cropImageView.getCroppedImage();
+                Intent intent = new Intent(CropActivity.this, ResultActivity.class);
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                byte[] bitmapByte = out.toByteArray();
+                intent.putExtra("bp", bitmapByte);
+                startActivity(intent);
             }
         });
 
