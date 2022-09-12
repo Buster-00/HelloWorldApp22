@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.edmodo.cropper.CropImageView;
@@ -42,6 +43,8 @@ public class CropActivity extends AppCompatActivity {
         //Initialize widget
         cropImageView = findViewById(R.id.crop_view);
         tv_cordinate = findViewById(R.id.tv_cordinate);
+        RelativeLayout relativeLayout = findViewById(R.id.Layout_relative);
+        Log.e("width", ""+relativeLayout.getWidth());
 
         cropImageView.setAspectRatio(5, 10);
         cropImageView.setFixedAspectRatio(false);
@@ -53,7 +56,7 @@ public class CropActivity extends AppCompatActivity {
         //set image
         try {
             Bitmap bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_1));
-            //bm = CameraParam.rotateBitmapByDegree(bm, 90);
+            bm = Bitmap.createScaledBitmap(bm,768,1024, true);
             cropImageView.setImageBitmap(bm);
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,8 +76,6 @@ public class CropActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bitmap croppedImage = cropImageView.getCroppedImage();
-                ImageView imageView = findViewById(R.id.img_view);
-                imageView.setImageBitmap(croppedImage);
             }
         });
 

@@ -109,8 +109,16 @@ public class mCameraFragment extends CameraFragment {
 
                 //Re store the bitmap
                 Log.e("Uri", uri.getPath());
-                FileOutputStream out = new FileOutputStream(new File(uri.getPath()));
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                File file = new File(uri.getPath());
+                if(file.exists())
+                {
+                    FileOutputStream out = new FileOutputStream(new File(uri.getPath()));
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                }
+                else
+                {
+                    //TODO
+                }
 
                 //display the bitmpa on imageview
                 bitmap = Bitmap.createBitmap(bitmap, 0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
@@ -131,14 +139,26 @@ public class mCameraFragment extends CameraFragment {
             //display the picture
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri));
+                bitmap = rotateBitmapByDegree(bitmap, getBitmapDegree(uri.getPath()));
 
+                //Re store the image
+                File file = new File(uri.getPath());
+                if(file.exists()){
+                    FileOutputStream out = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                }
+                else{
+                    //TODO
+                }
+
+                //display the bitmap to image view
                 Matrix matrix = new Matrix();
                 matrix.setScale(0.3f,0.3f);
-                bitmap = rotateBitmapByDegree(bitmap, getBitmapDegree(uri.getPath()));
                 bitmap = Bitmap.createBitmap(bitmap, 0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
-
                 ImageView img_view_2 = getActivity().findViewById(org.pytorch.helloworld.R.id.img_view_2);
                 img_view_2.setImageBitmap(bitmap);
+
+                //store the uri.toString to bundle
                 mbundle.putString(PICTURE_2, uri.toString());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
