@@ -30,8 +30,11 @@ import org.pytorch.helloworld.TestActivity;
 
 import com.camerax.lib.R;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /*
     default size:4000x2250px
@@ -103,12 +106,20 @@ public class mCameraFragment extends CameraFragment {
 
                 //set the bitmap
                 bitmap = rotateBitmapByDegree(bitmap, getBitmapDegree(uri.getPath()));
+
+                //Re store the bitmap
+                Log.e("Uri", uri.getPath());
+                FileOutputStream out = new FileOutputStream(new File(uri.getPath()));
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+                //display the bitmpa on imageview
                 bitmap = Bitmap.createBitmap(bitmap, 0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
                 ImageView img_view_1 = getActivity().findViewById(org.pytorch.helloworld.R.id.img_view_1);
                 img_view_1.setImageBitmap(bitmap);
 
                 //store the uri.toString to bundle
                 mbundle.putString(PICTURE_1, uri.toString());
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

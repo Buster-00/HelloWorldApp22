@@ -53,7 +53,7 @@ public class CropActivity extends AppCompatActivity {
         //set image
         try {
             Bitmap bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_1));
-            bm = CameraParam.rotateBitmapByDegree(bm, 90);
+            //bm = CameraParam.rotateBitmapByDegree(bm, 90);
             cropImageView.setImageBitmap(bm);
         } catch (IOException e) {
             e.printStackTrace();

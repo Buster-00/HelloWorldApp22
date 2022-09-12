@@ -14,6 +14,7 @@
 #include<opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
+#include <opencv2/calib3d.hpp>
 #include "opencv2/photo/photo.hpp"
 
 
@@ -67,7 +68,9 @@ using namespace std;
 
 void load_data(Mat &im1, Mat &im2, nc::NdArray<double> & fp, nc::NdArray<double> & tp)
 {
-
+    //Mat im1_gray, im2_gray;
+    //cv::cvtColor(im1,im1_gray,cv::COLOR_BGR2GRAY);
+    //cv::cvtColor(im2, im2_gray, cv::COLOR_BGR2GRAY);
     Ptr<SIFT> detector = SIFT::create();
 
     // Detect features and compute descriptors
@@ -75,48 +78,143 @@ void load_data(Mat &im1, Mat &im2, nc::NdArray<double> & fp, nc::NdArray<double>
     vector<KeyPoint> keypoints_object;
     vector<KeyPoint> keypoints_scene;
 
-    vector<DMatch> good_matches;
+
     detector->detectAndCompute(im1, noArray(), keypoints_object, descriptors_object);
     detector->detectAndCompute(im2, noArray(), keypoints_scene, descriptors_scene);
 
     // Match descriptors using FLANN
-    FlannBasedMatcher matcher;
-    vector< vector<DMatch> > matches;
+    //FlannBasedMatcher matcher;
+    //vector< vector<DMatch> > matches;
+    //matcher.knnMatch(descriptors_object, descriptors_scene, matches, 2);
+    //	vector<DMatch> good_matches;
+    //if (matches.size() <= 4) {
+    //	cout << "Error: too few matches were found" << endl;
+    //}
+    //else
+    //{
+    //	for (int i = 0; i < (int)matches.size(); i++) //THIS LOOP IS SENSITIVE TO SEGFAULTS
+    //	{
+    //		if ((matches[i][0].distance < 0.7*(matches[i][1].distance)) && ((int)matches[i].size() <= 2 && (int)matches[i].size() > 0))
+    //		{
+    //			good_matches.push_back(matches[i][0]);
+    //		}
+    //	}
+    //	if (good_matches.size() >= 10)
+    //	{
+    //		fp = nc::NdArray<double>(3, good_matches.size());
+    //		tp = nc::NdArray<double>(3, good_matches.size());
+    //		//vector<nc::NdArray<double>> result;
+    //		for (int j = 0; j < (int)good_matches.size(); j++)
+    //		{
+    //			fp(0, j) = keypoints_object[good_matches[j].queryIdx].pt.x;
+    //			fp(1, j) = keypoints_object[good_matches[j].queryIdx].pt.y;
+    //			fp(2, j) = 1;
+    //			//cout << "a1:\n" << fp[j,0] << endl;
+    //			//cout << "a1:\n" << fp[j,1] << endl;
+    //			//cout << "a1:\n" << fp[j,2] << endl;
+
+    //			tp(0, j) = keypoints_scene[good_matches[j].trainIdx].pt.x;
+    //			tp(1, j) = keypoints_scene[good_matches[j].trainIdx].pt.y;
+    //			tp(2, j) = 1;
+    //		}
+    //		//arr.push_back(fp);
+    //		//arr.push_back(tp);
+
+
+    //		//cout << "a2:\n" << fp << endl;
+    //		//return arr;
+    //	}
+    //}
+    ////printf("draw good matches\n");
+    ////Show detected matches
+
+    // Match using BF
+    BFMatcher matcher;
+    std::vector<vector<DMatch >> matches;
     matcher.knnMatch(descriptors_object, descriptors_scene, matches, 2);
 
-    if (matches.size() <= 4) {
-        cout << "Error: too few matches were found" << endl;
+    std::vector<DMatch> good_matches;
+    for (int i = 0; i < matches.size(); i++) {
+        float rejectRatio = 0.7;
+        if (matches[i][0].distance / matches[i][1].distance > rejectRatio)
+            continue;
+        good_matches.push_back(matches[i][0]);
     }
-    else
-    {
-        for (int i = 0; i < (int)matches.size(); i++) //THIS LOOP IS SENSITIVE TO SEGFAULTS
-        {
-            if ((matches[i][0].distance < 0.7*(matches[i][1].distance)) && ((int)matches[i].size() <= 2 && (int)matches[i].size() > 0))
-            {
-                good_matches.push_back(matches[i][0]);
-            }
-        }
-        if (good_matches.size() >= 10)
-        {
-            fp = nc::NdArray<double>(3, good_matches.size());
-            tp = nc::NdArray<double>(3, good_matches.size());
-            for (int j = 0; j < (int)good_matches.size(); j++)
-            {
-                fp(0, j) = keypoints_object[good_matches[j].queryIdx].pt.x;
-                fp(1, j) = keypoints_object[good_matches[j].queryIdx].pt.y;
-                fp(2, j) = 1;
 
-                tp(0, j) = keypoints_scene[good_matches[j].trainIdx].pt.x;
-                tp(1, j) = keypoints_scene[good_matches[j].trainIdx].pt.y;
-                tp(2, j) = 1;
-            }
-        }
+    std::vector<Point2f> good_keyPoints1, good_keyPoints2;
+    for (int i = 0; i < good_matches.size(); i++) {
+        good_keyPoints1.push_back(keypoints_object[good_matches[i].queryIdx].pt);
+        good_keyPoints2.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
     }
+
+    Mat status;
+    Mat H = findHomography(good_keyPoints1, good_keyPoints2, 4.0, RANSAC, status);
+
+
+    auto inlines = cv::sum(status);
+    fp = nc::NdArray<double>(3, int(inlines[0]));
+    tp = nc::NdArray<double>(3, int(inlines[0]));
+    //vector<nc::NdArray<double>> result;
+    int k = 0;
+    const int W = status.cols, h = status.rows;
+
+    //cout << "a1:\n" << status<< endl;
+    Mat_<uchar>::iterator it1 = status.begin<uchar>();
+    Mat_<uchar>::iterator itend1 = status.end<uchar>();
+    int j = 0;
+    for (; it1 != itend1; ++it1) {
+        //(*it1) = 128;
+        //cout << "a1:\n" << int((*it1)) << endl;
+        if (int((*it1)) == 1) {
+            fp(0, k) = good_keyPoints1[j].x;
+            fp(1, k) = good_keyPoints1[j].y;
+            fp(2, k) = 1;
+            //cout << "a1:\n" << fp[j,0] << endl;
+            //cout << "a1:\n" << fp[j,1] << endl;
+            //cout << "a1:\n" << fp[j,2] << endl;
+
+            tp(0, k) = good_keyPoints2[j].x;
+            tp(1, k) = good_keyPoints2[j].y;
+            tp(2, k) = 1;
+            k = k + 1;
+        }
+        j = j + 1;
+    }
+
+    //for (int j = 0; j < (int)good_matches.size(); j++)
+    //{
+
+    //	if (status.at<uchar>(0, j) == 1) {
+    //		fp(0, k) = good_keyPoints1[j].x;
+    //		fp(1, k) = good_keyPoints1[j].y;
+    //		fp(2, k) = 1;
+    //		//cout << "a1:\n" << fp[j,0] << endl;
+    //		//cout << "a1:\n" << fp[j,1] << endl;
+    //		//cout << "a1:\n" << fp[j,2] << endl;
+
+    //		tp(0, k) = good_keyPoints2[j].x;
+    //		tp(1, k) = good_keyPoints2[j].y;
+    //		tp(2, k) = 1;
+    //		k = k + 1;
+    //	}
+    //}
+
+    //cout << "fp:\n" << fp << endl;
+    //cout << "tp:\n" << tp << endl;
+
+    //Mat rect;
+    //drawMatches(im1, keypoints_object, im2, keypoints_scene, good_matches,rect);
+    //imshow("keypoints", rect);
+    //waitKey(0);
+    //destroyAllWindows();
+
+
 
     keypoints_object.clear();
     keypoints_scene.clear();
     matches.clear();
     good_matches.clear();
+
 }
 
 nc::NdArray<double> HM_ransac(nc::NdArray<double> & fp, nc::NdArray<double> & tp, int Nr, double min_dis)
