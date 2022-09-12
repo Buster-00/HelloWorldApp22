@@ -1,10 +1,13 @@
 package org.pytorch.helloworld;
 
+import static camera.mCameraFragment.PICTURE_1;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +23,7 @@ import org.pytorch.helloworld.R;
 
 import java.io.IOException;
 
+import camera.CameraParam;
 import crop.OnCropListener;
 import crop.mCropImagheView;
 
@@ -42,18 +46,18 @@ public class CropActivity extends AppCompatActivity {
         cropImageView.setAspectRatio(5, 10);
         cropImageView.setFixedAspectRatio(false);
         cropImageView.setGuidelines(1);
+
+        //get image uri
+        Uri uri_1 = Uri.parse(getIntent().getExtras().getString(PICTURE_1));
+
+        //set image
         try {
-            cropImageView.setImageBitmap(BitmapFactory.decodeStream(getAssets().open("TestSample_4.jpg")));
+            Bitmap bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_1));
+            bm = CameraParam.rotateBitmapByDegree(bm, 90);
+            cropImageView.setImageBitmap(bm);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        cropImageView.setOnCapturedPointerListener(new View.OnCapturedPointerListener() {
-            @Override
-            public boolean onCapturedPointer(View view, MotionEvent event) {
-                return false;
-            }
-        });
 
         cropImageView.setOnCropListener(new OnCropListener() {
             @Override

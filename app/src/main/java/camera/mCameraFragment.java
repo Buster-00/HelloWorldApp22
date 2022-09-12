@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 
 import com.camerax.lib.CameraFragment;
 
+import org.pytorch.helloworld.CropActivity;
 import org.pytorch.helloworld.PostProcessActivity;
 import org.pytorch.helloworld.TestActivity;
 
@@ -59,7 +60,8 @@ public class mCameraFragment extends CameraFragment {
             public void onClick(View v) {
                 if(mbundle.getString(PICTURE_1) != null && mbundle.getString(PICTURE_2) != null)
                 {
-                    Intent intent = new Intent(getActivity(), TestActivity.class);
+                    //Intent intent = new Intent(getActivity(), TestActivity.class);
+                    Intent intent = new Intent(getActivity(), CropActivity.class);
                     intent.putExtras(mbundle);
                     startActivity(intent);
                     getActivity().finish();
