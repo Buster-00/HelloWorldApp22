@@ -35,9 +35,11 @@ import crop.mCropImagheView;
 
 public class CropActivity extends AppCompatActivity {
 
+    //coordinates
+    String coordinates;
+
     //widget
     CropImageView cropImageView;
-    TextView tv_cordinate;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -47,7 +49,6 @@ public class CropActivity extends AppCompatActivity {
 
         //Initialize widget
         cropImageView = findViewById(R.id.crop_view);
-        tv_cordinate = findViewById(R.id.tv_cordinate);
         RelativeLayout relativeLayout = findViewById(R.id.Layout_relative);
         Log.e("width", ""+relativeLayout.getWidth());
 
@@ -67,7 +68,7 @@ public class CropActivity extends AppCompatActivity {
             @Override
             public void onCrop(int cropX, int cropY, int cropWidth, int cropHeight) {
                 Log.e("cord", cropX + " " + cropY + " " + cropWidth + " " + cropHeight);
-                tv_cordinate.setText("(" + cropX + ", " + cropY + ", " + cropWidth + ", " + cropHeight + ")");
+                coordinates = "(" + cropX + ", " + cropY + ", " + cropWidth + ", " + cropHeight + ")";
             }
         });
 
@@ -82,6 +83,7 @@ public class CropActivity extends AppCompatActivity {
                 croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 byte[] bitmapByte = out.toByteArray();
                 intent.putExtra("bp", bitmapByte);
+                intent.putExtra("coordinates", coordinates);
                 startActivity(intent);
             }
         });

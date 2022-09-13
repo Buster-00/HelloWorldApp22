@@ -22,14 +22,7 @@
           android:layout_height="wrap_content"
           android:text="Next" />
 
-      <TextView
-          android:layout_centerHorizontal="true"
-          android:id="@+id/tv_cordinate"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/btn_next"
-          android:text="123"
-          android:textColor="@color/black_translucent" />
+
 
 
 </RelativeLayout>
