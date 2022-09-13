@@ -48,6 +48,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Vector;
 import static org.pytorch.helloworld.Param.HEIGHT;
 import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
@@ -195,13 +196,11 @@ public class TestActivity extends AppCompatActivity {
 
         //turn to another activity
         Intent intent = new Intent(TestActivity.this, MatActivity.class);
-        Vector<Mat> matVector = new Vector<>();
-        matVector.add(imgRE1);
-        matVector.add(imgRE2);
-        mMat mats = new mMat();
-        mats.setMatVector(matVector);
-        intent.putExtra("mats", mats);
-        getApplicationContext().
+        HashMap<String, Mat> hashMap_mat = new HashMap<>();
+        hashMap_mat.put("imgRE1", imgRE1);
+        hashMap_mat.put("imgRE2", imgRE2);
+        Data_app data_app = (Data_app) getApplication();
+        data_app.setHashMap_Mats(hashMap_mat);
         startActivity(intent);
 
         time_last += "\nre_end:" + format.format(new Date());
