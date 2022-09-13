@@ -9,7 +9,7 @@
 
     <com.edmodo.cropper.CropImageView
         android:id="@+id/crop_view"
-        android:layout_width="800dp"
+        android:layout_width="300dp"
         android:layout_height="400dp"
         android:layout_centerInParent="true" />
 

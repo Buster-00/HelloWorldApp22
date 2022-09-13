@@ -64,7 +64,7 @@ public class mCameraFragment extends CameraFragment {
                 if(mbundle.getString(PICTURE_1) != null && mbundle.getString(PICTURE_2) != null)
                 {
                     //Intent intent = new Intent(getActivity(), TestActivity.class);
-                    Intent intent = new Intent(getActivity(), CropActivity.class);
+                    Intent intent = new Intent(getActivity(), TestActivity.class);
                     intent.putExtras(mbundle);
                     startActivity(intent);
                     getActivity().finish();

@@ -56,16 +56,12 @@ public class CropActivity extends AppCompatActivity {
         cropImageView.setGuidelines(1);
 
         //get image uri
-        Uri uri_1 = Uri.parse(getIntent().getExtras().getString(PICTURE_1));
+        byte[] bytes = getIntent().getByteArrayExtra("bp");
 
         //set image
-        try {
-            Bitmap bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri_1));
-            bm = Bitmap.createScaledBitmap(bm,768,1024, true);
-            cropImageView.setImageBitmap(bm);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        bm = Bitmap.createScaledBitmap(bm,768,1024, true);
+        cropImageView.setImageBitmap(bm);
 
         cropImageView.setOnCropListener(new OnCropListener() {
             @Override

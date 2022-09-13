@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.imgproc.Imgproc;
@@ -36,6 +38,7 @@ import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,14 +55,18 @@ import static org.pytorch.helloworld.Param.MODULE_NAME;
 import static org.pytorch.helloworld.Param.WIDETH_OF_BITMAP;
 import static org.pytorch.helloworld.Param.WIDTH;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import camera.CameraParam;
 
 public class TestActivity extends AppCompatActivity {
 
-
+    //Bitmap
+    Bitmap bm;
 
     //widget
     ProgressDialog progressDialog;
+    FloatingActionButton btn_confirm;
 
     //load JNI
     static {
@@ -80,6 +87,23 @@ public class TestActivity extends AppCompatActivity {
 
         //show process bar
         showProcessBar();
+
+        //bind onClick listener
+        btn_confirm = findViewById(R.id.btn_confirm);
+
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bm != null){
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    byte[] bytes = out.toByteArray();
+                    Intent intent = new Intent(TestActivity.this, CropActivity.class);
+                    intent.putExtra("bp", bytes);
+                    startActivity(intent);
+                }
+            }
+        });
 
         //create a new thread to process task
         new Handler().post(new Runnable() {
@@ -212,6 +236,9 @@ public class TestActivity extends AppCompatActivity {
         Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,224,224,255);
         ImageView imageView2 = findViewById(R.id.img_view_2);
         imageView2.setImageBitmap(bmp_mask_2);
+
+        // set bitmap to transfer to the Crop activity
+        bm = bmp_mask_2;
 /*
 //    Mat mat_mask1 = new Mat();
 //    Mat mat_mask2 = new Mat();
