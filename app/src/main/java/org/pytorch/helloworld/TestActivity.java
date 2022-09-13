@@ -61,6 +61,8 @@ import camera.CameraParam;
 
 public class TestActivity extends AppCompatActivity {
 
+
+
     //Bitmap
     Bitmap bm;
 
@@ -188,7 +190,19 @@ public class TestActivity extends AppCompatActivity {
 //    Imgproc.cvtColor(imgHL1 , imgHL1 ,  COLOR_RGBA2RGB);
 //    Imgproc.cvtColor(imgHL2 , imgHL2 ,  COLOR_RGBA2RGB);
 
+        //registration
         registration(imgHL1.getNativeObjAddr(), imgHL2.getNativeObjAddr(),imgRE1.getNativeObjAddr(),imgRE2.getNativeObjAddr());
+
+        //turn to another activity
+        Intent intent = new Intent(TestActivity.this, MatActivity.class);
+        Vector<Mat> matVector = new Vector<>();
+        matVector.add(imgRE1);
+        matVector.add(imgRE2);
+        mMat mats = new mMat();
+        mats.setMatVector(matVector);
+        intent.putExtra("mats", mats);
+        getApplicationContext().
+        startActivity(intent);
 
         time_last += "\nre_end:" + format.format(new Date());
 
@@ -238,7 +252,9 @@ public class TestActivity extends AppCompatActivity {
         imageView2.setImageBitmap(bmp_mask_2);
 
         // set bitmap to transfer to the Crop activity
-        bm = bmp_mask_2;
+        bm = bmp_mask_1;
+
+
 /*
 //    Mat mat_mask1 = new Mat();
 //    Mat mat_mask2 = new Mat();

@@ -473,3 +473,60 @@ Java_org_pytorch_helloworld_MainActivity_registration( JNIEnv *env, jobject thiz
 
 
 }
+
+
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_org_pytorch_helloworld_ResultActivity_user_1mask_1seamlessclone(JNIEnv *env, jobject thiz,
+                                                                     jlong im1_p_addr,
+                                                                     jlong im2_p_addr,
+                                                                     jlong des_addr, jint x, jint y,
+                                                                     jint width, jint height) {
+    Mat& im1_p = *(Mat*)im1_p_addr;
+    Mat& im2_p = *(Mat*)im2_p_addr;
+
+    cv::Mat mask(im1_p.rows, im1_p.cols, CV_8UC3, cv::Scalar(0, 0, 0));
+    //mask = im1_mask;
+
+    // Check if the image is created successfully.
+    if (!mask.data)
+    {
+        std::cout << "Could not open or find the mask" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    //int left_top_x = x;
+    //int left_top_y = y;
+    //int width = 50;
+    //int height = 80;
+    if (width / 2 != 0.5) width = width + 1;
+
+    if (width / 2 != 0.5) height = height + 1;
+
+
+
+
+    cv::Point p3(x, y), p4(x + width, y + height);
+    cv::Scalar colorRectangle2(255, 255, 255);
+
+    cv::rectangle(mask, p3, p4, colorRectangle2, -1);
+
+    //cv::namedWindow("Display window", cv::WINDOW_AUTOSIZE);
+    //cv::imshow("Display window", mask);
+
+    //cv::waitKey(0);
+
+
+    //imshow("raw1", im1_p);
+    //imshow("raw2", im2_p);
+    //waitKey(0);
+    //destroyAllWindows();
+    cv::Point center(x + int(width / 2), y + int(height / 2));
+    Mat result;
+    cv::seamlessClone(im2_p, im1_p, mask, center, result, 1);
+
+    //return result
+    Mat* des = (Mat*)des_addr;
+    des->create(result.rows, result.cols, result.type());
+    memcpy(des->data, result.data, result.rows * result.step);
+}

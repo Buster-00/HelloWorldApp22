@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.opencv.core.Mat;
+
 public class ResultActivity extends AppCompatActivity {
+
+    public native Mat user_mask_seamlessclone(long im1_p_addr, long im2_p_addr, long des_addr, int x, int y, int width, int height);
 
     //widget
     TextView textView;
@@ -26,7 +30,15 @@ public class ResultActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.tv_coordinate);
 
-        imageView.setImageBitmap(bm);
-        textView.setText(coordinates);
+        if(bm != null)
+        {
+            imageView.setImageBitmap(bm);
+        }
+
+        if(!coordinates.isEmpty())
+        {
+            textView.setText(coordinates);
+        }
+
     }
 }
