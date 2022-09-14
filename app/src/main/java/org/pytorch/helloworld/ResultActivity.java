@@ -43,6 +43,7 @@ public class ResultActivity extends AppCompatActivity {
         Mat imgRE1, imgRE2;
         Mat des = new Mat();
 
+        //retrieve imgRE1 and imgRE2 from application
         Data_app data_app = (Data_app) getApplication();
         HashMap<String, Mat> hashMap_mats = data_app.getHashMap_Mats();
         imgRE1 = hashMap_mats.get("imgRE1");
@@ -51,6 +52,7 @@ public class ResultActivity extends AppCompatActivity {
         //seamless clone
         user_mask_seamlessclone(imgRE1.getNativeObjAddr(), imgRE2.getNativeObjAddr(), des.getNativeObjAddr(),
                 x, y, width, height);
+        textView.setText(x + ", " + y + ", " + width + ", " + height + "");
 
         Bitmap bm = Bitmap.createBitmap(des.cols(), des.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(des, bm);

@@ -83,6 +83,9 @@ public class TestActivity extends AppCompatActivity {
     private int[] inputArray= new int[224*224]  ;
     private Mat imgHL1_original, imgHL2_original, imgHL1,imgHL2,imgRE1,imgRE2;
 
+    //native funciton
+    private native void Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,14 +194,19 @@ public class TestActivity extends AppCompatActivity {
 //    Imgproc.cvtColor(imgHL1 , imgHL1 ,  COLOR_RGBA2RGB);
 //    Imgproc.cvtColor(imgHL2 , imgHL2 ,  COLOR_RGBA2RGB);
 
-        //registration
+        //Registration
         registration(imgHL1.getNativeObjAddr(), imgHL2.getNativeObjAddr(),imgRE1.getNativeObjAddr(),imgRE2.getNativeObjAddr());
+
+        //Clip
+        Mat imgRE1_crop = new Mat();
+        Mat imgRE2_crop = new Mat();
+        Clip(imgHL2.getNativeObjAddr(), imgRE1.getNativeObjAddr(), imgRE2.getNativeObjAddr(),imgRE1_crop.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
 
         //turn to another activity
         Intent intent = new Intent(TestActivity.this, MatActivity.class);
         HashMap<String, Mat> hashMap_mat = new HashMap<>();
-        hashMap_mat.put("imgRE1", imgRE1);
-        hashMap_mat.put("imgRE2", imgRE2);
+        hashMap_mat.put("imgRE1", imgRE1_crop);
+        hashMap_mat.put("imgRE2", imgRE2_crop);
         Data_app data_app = (Data_app) getApplication();
         data_app.setHashMap_Mats(hashMap_mat);
         startActivity(intent);
