@@ -647,10 +647,10 @@ void mosaic_global_v1(Mat &im1, Mat &im2, nc::NdArray<double> &H, Mat &im1_p, Ma
 
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jintArray JNICALL
 Java_org_pytorch_helloworld_TestActivity_Clip(JNIEnv *env, jobject thiz, jlong im2_small_addr,
                                               jlong im1_p_addr, jlong im2_p_addr,
-                                              jlong im1_crop_addr, jlong im2_crop_addr) {
+                                              jlong im1_crop_addr, jlong im2_crop_addr  ) {
 
     Mat& im2_small = *(Mat*)im2_small_addr;
     Mat& im1_p = *(Mat*)im1_p_addr;
@@ -667,8 +667,11 @@ Java_org_pytorch_helloworld_TestActivity_Clip(JNIEnv *env, jobject thiz, jlong i
     auto left_up = contours[0][0];
     auto right_down = contours[0][2];
 
-    auto im1_p_crop = im1_p(cv::Range(left_up.y, right_down.y + 1), cv::Range(left_up.x, right_down.x + 1));
-    auto im2_p_crop = im2_p(cv::Range(left_up.y, right_down.y + 1), cv::Range(left_up.x, right_down.x + 1));
+    //auto im1_p_crop = im1_p(cv::Range(left_up.y, right_down.y + 1), cv::Range(left_up.x, right_down.x + 1));
+    //auto im2_p_crop = im2_p(cv::Range(left_up.y, right_down.y + 1), cv::Range(left_up.x, right_down.x + 1));
+
+    Mat im1_p_crop = im1_p(Rect(left_up, right_down));
+    Mat im2_p_crop = im2_p(Rect(left_up, right_down));
 
     //copy the result
     im1_p_crop_j->create(im1_p_crop.rows, im1_p_crop.cols, im1_p_crop.type());
@@ -676,5 +679,16 @@ Java_org_pytorch_helloworld_TestActivity_Clip(JNIEnv *env, jobject thiz, jlong i
 
     im2_p_crop_j->create(im2_p_crop.rows, im2_p_crop.cols, im2_p_crop.type());
     memcpy(im2_p_crop_j->data, im2_p_crop.data, im2_p_crop.rows * im2_p_crop.step);
+
+
+    jintArray mArray = env->NewIntArray(4);
+    jint fill[4];
+    fill[0] = left_up.y;
+    fill[1] = right_down.y + 1;
+    fill[2] = left_up.x;
+    fill[3] = right_down.x + 1;
+
+    env->SetIntArrayRegion(mArray, 0, 4,fill);
+    return mArray;
 
 }

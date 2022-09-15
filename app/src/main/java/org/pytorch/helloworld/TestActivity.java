@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -46,6 +48,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.security.cert.PolicyNode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,7 +87,7 @@ public class TestActivity extends AppCompatActivity {
     private Mat imgHL1_original, imgHL2_original, imgHL1,imgHL2,imgRE1,imgRE2;
 
     //native funciton
-    private native void Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
+    private native int[] Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,13 +203,20 @@ public class TestActivity extends AppCompatActivity {
         //Clip
         Mat imgRE1_crop = new Mat();
         Mat imgRE2_crop = new Mat();
-        Clip(imgHL2.getNativeObjAddr(), imgRE1.getNativeObjAddr(), imgRE2.getNativeObjAddr(),imgRE1_crop.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
+        
+        int[] coordinates =  Clip(imgHL2.getNativeObjAddr(), imgRE1.getNativeObjAddr(), imgRE2.getNativeObjAddr(),imgRE1_crop.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
+        for(int i : coordinates){
+            Log.e("array", " " + i);
+        }
+        Rect roi = new Rect(new Point(coordinates[2], coordinates[0]), new Point(coordinates[3], coordinates[1]));
+        Mat imgRE1_crop_1 = new Mat(imgRE1, roi);
+        Mat imgRE1_crop_2 = new Mat(imgRE2, roi);
 
         //turn to another activity
         Intent intent = new Intent(TestActivity.this, MatActivity.class);
         HashMap<String, Mat> hashMap_mat = new HashMap<>();
-        hashMap_mat.put("imgRE1", imgRE1_crop);
-        hashMap_mat.put("imgRE2", imgRE2_crop);
+        hashMap_mat.put("imgRE1", imgRE1_crop_1);
+        hashMap_mat.put("imgRE2", imgRE1_crop_2);
         Data_app data_app = (Data_app) getApplication();
         data_app.setHashMap_Mats(hashMap_mat);
         startActivity(intent);
