@@ -69,6 +69,7 @@ public class TestActivity extends AppCompatActivity {
 
     //Thread
     Thread mThread;
+    Handler mHandler;
 
     //Bitmap
     Bitmap bm;
@@ -91,28 +92,6 @@ public class TestActivity extends AppCompatActivity {
 
     //native funciton
     private native int[] Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
-
-    //Handler
-    Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if(msg.what == 1000)
-            {
-                progressDialog.dismiss();
-            }
-        }
-    };
-
-    //Runnable
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            processFunc();
-            //mHandler.sendEmptyMessage(1000);
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +118,25 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        mThread = new Thread(runnable);
+        //Define handler
+        mHandler = new Handler(getMainLooper()){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                if(msg.what == 1000)
+                {
+                    //progressDialog.dismiss();
+                }
+            }
+        };
+
+        mThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                processFunc();
+                mHandler.sendEmptyMessage(1000);
+            }
+        });
         mThread.start();
 
     }
@@ -491,5 +488,10 @@ public class TestActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Processing the image");
         progressDialog.show();
+    }
+
+    private Mat exposure_compensator(Mat im1_p, Mat im2_p)
+    {
+        return null;
     }
 }

@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
+        android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_baseline_check_24"
         android:id="@+id/btn_next"/>
 
