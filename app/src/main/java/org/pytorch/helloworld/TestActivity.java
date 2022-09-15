@@ -8,6 +8,7 @@ import static org.pytorch.helloworld.MainActivity.validate;
 import static camera.mCameraFragment.PICTURE_1;
 import static camera.mCameraFragment.PICTURE_2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -20,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -65,7 +67,8 @@ import camera.CameraParam;
 
 public class TestActivity extends AppCompatActivity {
 
-
+    //Thread
+    Thread mThread;
 
     //Bitmap
     Bitmap bm;
@@ -88,6 +91,28 @@ public class TestActivity extends AppCompatActivity {
 
     //native funciton
     private native int[] Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
+
+    //Handler
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if(msg.what == 1000)
+            {
+                progressDialog.dismiss();
+            }
+        }
+    };
+
+    //Runnable
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            processFunc();
+            //mHandler.sendEmptyMessage(1000);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,14 +139,8 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        //create a new thread to process task
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                processFunc();
-                progressDialog.dismiss();
-            }
-        });
+        mThread = new Thread(runnable);
+        mThread.start();
 
     }
 
@@ -220,6 +239,7 @@ public class TestActivity extends AppCompatActivity {
         Data_app data_app = (Data_app) getApplication();
         data_app.setHashMap_Mats(hashMap_mat);
         startActivity(intent);
+        finish();
 
         time_last += "\nre_end:" + format.format(new Date());
 
