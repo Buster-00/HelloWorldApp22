@@ -16,6 +16,7 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/calib3d.hpp>
 #include "opencv2/photo/photo.hpp"
+#include "opencv2/stitching/detail/exposure_compensate.hpp"
 
 
 using namespace cv;
@@ -691,4 +692,40 @@ Java_org_pytorch_helloworld_TestActivity_Clip(JNIEnv *env, jobject thiz, jlong i
     env->SetIntArrayRegion(mArray, 0, 4,fill);
     return mArray;
 
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_pytorch_helloworld_TestActivity_exposure_1compensator(JNIEnv *env, jobject thiz,
+                                                               jlong im1_p_addr, jlong im2_p_addr) {
+    // TODO: implement exposure_compensator()
+    Mat& im1 = *(Mat*)im1_p_addr;
+    Mat& im2 = *(Mat*)im2_p_addr;
+
+    UMat p1, p2;
+    im1.copyTo(p1);
+    im2.copyTo(p2);
+    vector<UMat> matVector;
+    matVector.push_back(p1);
+    matVector.push_back(p2);
+
+    Point c1(0,0), c2(0,0);
+    vector<Point> pointVector;
+    pointVector.push_back(c1);
+    pointVector.push_back(c2);
+
+    UMat mask1(p1.rows, p1.cols, CV_8UC3, Scalar(255,255,255));
+    UMat mask2(p2.rows, p2.cols, CV_8UC3, Scalar(255,255,255));
+    vector<UMat> maskVector;
+    maskVector.push_back(mask1);
+    maskVector.push_back(mask2);
+
+    Ptr<cv::detail::ExposureCompensator> compensator = cv::detail::ExposureCompensator::createDefault(detail::ExposureCompensator::GAIN_BLOCKS);
+    compensator->feed(pointVector, matVector, maskVector);
+
+    compensator->apply(0,c1,p1,mask1);
+    compensator->apply(0,c2,p2,mask2);
+
+    //convert umat to mat
+    im1 = p1.getMat(cv::ACCESS_RW);
+    im2 = p2.getMat(cv::ACCESS_RW);
 }

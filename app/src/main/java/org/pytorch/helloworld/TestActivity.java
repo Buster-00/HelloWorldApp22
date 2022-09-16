@@ -93,6 +93,8 @@ public class TestActivity extends AppCompatActivity {
     //native funciton
     private native int[] Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
 
+    private native void exposure_compensator(long im1_p_addr, long im2_p_addr);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -227,6 +229,9 @@ public class TestActivity extends AppCompatActivity {
         Rect roi = new Rect(new Point(coordinates[2], coordinates[0]), new Point(coordinates[3], coordinates[1]));
         Mat imgRE1_crop_1 = new Mat(imgRE1, roi);
         Mat imgRE1_crop_2 = new Mat(imgRE2, roi);
+
+        //Exposure compensator
+        exposure_compensator(imgRE1_crop_1.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
 
         //turn to another activity
         Intent intent = new Intent(TestActivity.this, MatActivity.class);
@@ -490,8 +495,4 @@ public class TestActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
-    private Mat exposure_compensator(Mat im1_p, Mat im2_p)
-    {
-        return null;
-    }
 }

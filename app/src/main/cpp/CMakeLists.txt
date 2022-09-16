@@ -6,6 +6,7 @@
 
 cmake_minimum_required(VERSION 3.10.2)
 
+
 # Declares and names the project.
 
 #include_directories(${CMAKE_SOURCE_DIR}/include)
