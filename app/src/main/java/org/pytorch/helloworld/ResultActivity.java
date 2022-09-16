@@ -1,5 +1,6 @@
 package org.pytorch.helloworld;
 
+import static org.opencv.imgproc.Imgproc.bilateralFilter;
 import static org.opencv.imgproc.Imgproc.cvtColor;
 import static org.opencv.imgproc.Imgproc.rectangle;
 import static org.opencv.photo.Photo.seamlessClone;
@@ -58,13 +59,17 @@ public class ResultActivity extends AppCompatActivity {
 
         //Convert 8UC4 to 32FC3
 
-        //seamless clone
+        //Seamless clone
         Mat result = user_mask_seamlessClone_java(imgRE1, imgRE2,
                 x, y, width, height);
         textView.setText(x + ", " + y + ", " + width + ", " + height + "");
 
-        Bitmap bm = Bitmap.createBitmap(result.cols(), result.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(result, bm);
+        //Bilateral Filter
+        Mat temp = new Mat();
+        bilateralFilter(result,temp,0, 2, 5);
+
+        Bitmap bm = Bitmap.createBitmap(temp.cols(), temp.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(temp, bm);
 
         imageView.setImageBitmap(bm);
     }
