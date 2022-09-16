@@ -16,6 +16,7 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/calib3d.hpp>
 #include "opencv2/photo/photo.hpp"
+#include "opencv2/stitching/detail/exposure_compensate.hpp"
 
 
 using namespace cv;
@@ -65,6 +66,8 @@ Java_org_pytorch_helloworld_MainActivity_testForNumcpp(
 using namespace cv;
 using namespace nc;
 using namespace std;
+
+void mosaic_global_v1(Mat &im1, Mat &im2, nc::NdArray<double> &H, Mat &im1_p, Mat &im2_p);
 
 void load_data(Mat &im1, Mat &im2, nc::NdArray<double> & fp, nc::NdArray<double> & tp)
 {
@@ -469,8 +472,7 @@ Java_org_pytorch_helloworld_MainActivity_registration( JNIEnv *env, jobject thiz
 //    im1_p = im1_small;
 //    im2_p = im2_small;
 
-    mosaic_global(im1_small, im2_small, H, im1_p, im2_p);
-
+    mosaic_global_v1(im1_small, im2_small, H, im1_p, im2_p);
 
 }
 
@@ -529,4 +531,203 @@ Java_org_pytorch_helloworld_ResultActivity_user_1mask_1seamlessclone(JNIEnv *env
     Mat* des = (Mat*)des_addr;
     des->create(result.rows, result.cols, result.type());
     memcpy(des->data, result.data, result.rows * result.step);
+}
+
+void mosaic_global_v1(Mat &im1, Mat &im2, nc::NdArray<double> &H, Mat &im1_p, Mat &im2_p)
+{
+    nc::NdArray<double> box2 = nc::NdArray<double>{ {0.0, double(im2.cols) - 1, double(im2.cols) - 1, 0},{0, 0,double(im2.rows) - 1, double(im2.rows) - 1},{1, 1, 1,1} };
+    nc::NdArray<double> U;
+    nc::NdArray<double> s;
+    nc::NdArray<double> vt;
+    auto box2_ = nc::random::randN<double>(nc::Shape(3, 4));
+    for (size_t i = 0; i < 4; i++)
+    {
+        box2_.put(nc::Slice(3), i, nc::linalg::lstsq(H, box2(box2.rSlice(), i)));
+    }
+
+    cout << box2 << endl;
+    //cout << H << endl;
+    //cv2.remap(src, map_x_32, map_y_32, cv2.INTER_LINEAR)
+    cout << box2_ << endl;
+    cout << box2_(0, box2_.cSlice()) / box2_(2, box2_.cSlice()) << endl;
+    box2_.put(0, box2_.cSlice(), box2_(0, box2_.cSlice()) / box2_(2, box2_.cSlice()));
+    box2_.put(1, box2_.cSlice(), box2_(1, box2_.cSlice()) / box2_(2, box2_.cSlice()));
+
+
+    cout << box2_ << endl;
+
+    auto u0 = nc::min(box2_(0, box2_.cSlice())).at(0);
+    if (u0 > 0)
+        u0 = 0;
+
+    double u1 = 0;
+
+    if ((im1.cols - 1) > nc::max(box2_(0, box2_.cSlice())).at(0))
+    {
+        u1 = im1.cols - 1;
+    }
+    else
+    {
+        //cout << nc::max(box2_(0, box2_.cSlice())) << endl;
+        //cout << nc::max(box2_(0, box2_.cSlice())).at(0) << endl;
+        u1 = nc::max(box2_(0, box2_.cSlice())).at(0);
+    }
+    auto ur = nc::arange(u0, u1 + 1);
+    auto mosaisw = ur.size();
+    cout << mosaisw << endl;
+
+    auto v0 = nc::min(box2_(1, box2_.cSlice())).at(0);
+    if (v0 > 0)
+        v0 = 0;
+
+    double v1 = 0;
+
+    if ((im1.rows - 1) > nc::max(box2_(1, box2_.cSlice())).at(0))
+    {
+        v1 = im1.rows - 1;
+    }
+    else
+    {
+        v1 = nc::max(box2_(1, box2_.cSlice())).at(0);
+    }
+    auto vr = nc::arange(v0, v1 + 1);
+    auto mosaish = vr.size();
+    cout << mosaish << endl;
+
+    cout << u0 << endl;
+    im1_p = cv::Mat(cv::Size(mosaisw, mosaish), CV_32FC3);
+    im2_p = cv::Mat(cv::Size(mosaisw, mosaish), CV_32FC3);
+
+
+    Mat im1_mask(im1.rows, im1.cols, CV_8UC3, cv::Scalar(255, 255, 255));
+
+    int rows = im1.rows;
+    int cols = im2.cols;
+
+    cv::Mat xMapArray(im1_p.size(), CV_32FC1);
+    cv::Mat yMapArray(im1_p.size(), CV_32FC1);
+
+    for (int i = 0; i < mosaish; i++)
+    {
+        for (int j = 0; j < mosaisw; j++)
+        {
+            xMapArray.at<float>(i, j) = ur.at(j);
+            yMapArray.at<float>(i, j) = vr.at(i);
+        }
+    }
+    //cout << xMapArray << endl;
+    //cout << yMapArray << endl;
+
+    //进行变换
+    cv::remap(im1, im1_p, xMapArray, yMapArray, cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+
+    //cv::imshow("im1_p", im1_mask);
+    //cv::imshow("im1", im2);
+    //cv::waitKey(0);
+    //cv::destroyAllWindows();
+
+    auto z_ = H(2, 0)*xMapArray + H(2, 1)*yMapArray + H(2, 2);
+    auto u_ = (H(0, 0)*xMapArray + H(0, 1)*yMapArray + H(0, 2)) / z_;
+    auto v_ = (H(1, 0)*xMapArray + H(1, 1)*yMapArray + H(1, 2)) / z_;
+
+    cv::remap(im2, im2_p, u_, v_, cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+//    cv::imshow("im2_p", im2_p);
+//    cv::imshow("im2", im2);
+//    cv::waitKey(0);
+//    cv::destroyAllWindows();
+
+    im2 = cv::Mat(cv::Size(mosaisw, mosaish), CV_32FC3);
+    cv::remap(im1_mask, im2, xMapArray, yMapArray, cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+//    cv::imshow("im2", im2);
+//    cv::waitKey(0);
+//    cv::destroyAllWindows();
+
+
+
+}
+
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_org_pytorch_helloworld_TestActivity_Clip(JNIEnv *env, jobject thiz, jlong im2_small_addr,
+                                              jlong im1_p_addr, jlong im2_p_addr,
+                                              jlong im1_crop_addr, jlong im2_crop_addr  ) {
+
+    Mat& im2_small = *(Mat*)im2_small_addr;
+    Mat& im1_p = *(Mat*)im1_p_addr;
+    Mat& im2_p = *(Mat*)im2_p_addr;
+    Mat* im1_p_crop_j = (Mat*) im1_crop_addr;
+    Mat* im2_p_crop_j = (Mat*) im2_crop_addr;
+
+    // crop the im1 and im2 according to the inner max rect indicated by im2_small
+    Mat b;
+    extractChannel(im2_small, b, 0);
+    vector<std::vector<cv::Point> > contours;
+    vector<Vec4i> hierarchy;
+    findContours(b,contours,hierarchy,RETR_TREE,CHAIN_APPROX_SIMPLE,  Point(0, 0));
+    auto left_up = contours[0][0];
+    auto right_down = contours[0][2];
+
+    //auto im1_p_crop = im1_p(cv::Range(left_up.y, right_down.y + 1), cv::Range(left_up.x, right_down.x + 1));
+    //auto im2_p_crop = im2_p(cv::Range(left_up.y, right_down.y + 1), cv::Range(left_up.x, right_down.x + 1));
+
+    Mat im1_p_crop = im1_p(Rect(left_up, right_down));
+    Mat im2_p_crop = im2_p(Rect(left_up, right_down));
+
+    //copy the result
+    im1_p_crop_j->create(im1_p_crop.rows, im1_p_crop.cols, im1_p_crop.type());
+    memcpy(im1_p_crop_j->data, im1_p_crop.data, im1_p_crop.rows * im1_p_crop.step);
+
+    im2_p_crop_j->create(im2_p_crop.rows, im2_p_crop.cols, im2_p_crop.type());
+    memcpy(im2_p_crop_j->data, im2_p_crop.data, im2_p_crop.rows * im2_p_crop.step);
+
+
+    jintArray mArray = env->NewIntArray(4);
+    jint fill[4];
+    fill[0] = left_up.y;
+    fill[1] = right_down.y + 1;
+    fill[2] = left_up.x;
+    fill[3] = right_down.x + 1;
+
+    env->SetIntArrayRegion(mArray, 0, 4,fill);
+    return mArray;
+
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_pytorch_helloworld_TestActivity_exposure_1compensator(JNIEnv *env, jobject thiz,
+                                                               jlong im1_p_addr, jlong im2_p_addr) {
+    // TODO: implement exposure_compensator()
+    Mat& im1 = *(Mat*)im1_p_addr;
+    Mat& im2 = *(Mat*)im2_p_addr;
+
+    UMat p1, p2;
+    im1.copyTo(p1);
+    im2.copyTo(p2);
+    cvtColor(p1, p1, COLOR_BGRA2BGR);
+    cvtColor(p2, p2, COLOR_BGRA2BGR);
+    vector<UMat> matVector;
+    matVector.push_back(p1);
+    matVector.push_back(p2);
+
+    Point c1(0,0), c2(0,0);
+    vector<Point> pointVector;
+    pointVector.push_back(c1);
+    pointVector.push_back(c2);
+
+    UMat mask1(p1.rows, p1.cols, CV_8UC3, Scalar(255, 255,255));
+    UMat mask2(p2.rows, p2.cols, CV_8UC3, Scalar(255, 255,255));
+    vector<UMat> maskVector;
+    maskVector.push_back(mask1);
+    maskVector.push_back(mask2);
+
+    Ptr<detail::ExposureCompensator> compensator = detail::ExposureCompensator::createDefault(detail::ExposureCompensator::GAIN_BLOCKS);
+    compensator->feed(pointVector, matVector, maskVector);
+
+    compensator->apply(0,c1,p1,mask1);
+    compensator->apply(0,c2,p2,mask2);
+
+    //convert umat to mat
+    p1.copyTo(im1);
+    p2.copyTo(im2);
 }

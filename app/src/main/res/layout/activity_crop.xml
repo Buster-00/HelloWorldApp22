@@ -7,22 +7,23 @@
     android:id="@+id/Layout_relative"
     tools:context=".CropActivity">
 
-    <com.edmodo.cropper.CropImageView
-        android:id="@+id/crop_view"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        android:layout_centerInParent="true" />
+  <com.edmodo.cropper.CropImageView
+      android:id="@+id/crop_view"
+      android:layout_width="300dp"
+      android:layout_height="400dp"
+      android:layout_centerInParent="true" />
 
 
-      <Button
-          android:layout_centerHorizontal="true"
-          android:layout_below="@+id/crop_view"
-          android:id="@+id/btn_next"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Next" />
+    <Button
+        android:textColor="@color/white_translucent"
+        android:backgroundTint="@color/colorPrimary"
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/crop_view"
+        android:layout_centerHorizontal="true"
+        android:text="Next" />
 
-
-
+  
 
 </RelativeLayout>
