@@ -704,6 +704,8 @@ Java_org_pytorch_helloworld_TestActivity_exposure_1compensator(JNIEnv *env, jobj
     UMat p1, p2;
     im1.copyTo(p1);
     im2.copyTo(p2);
+    cvtColor(p1, p1, COLOR_BGRA2BGR);
+    cvtColor(p2, p2, COLOR_BGRA2BGR);
     vector<UMat> matVector;
     matVector.push_back(p1);
     matVector.push_back(p2);
@@ -713,19 +715,19 @@ Java_org_pytorch_helloworld_TestActivity_exposure_1compensator(JNIEnv *env, jobj
     pointVector.push_back(c1);
     pointVector.push_back(c2);
 
-    UMat mask1(p1.rows, p1.cols, CV_8UC3, Scalar(255,255,255));
-    UMat mask2(p2.rows, p2.cols, CV_8UC3, Scalar(255,255,255));
+    UMat mask1(p1.rows, p1.cols, CV_8UC3, Scalar(255, 255,255));
+    UMat mask2(p2.rows, p2.cols, CV_8UC3, Scalar(255, 255,255));
     vector<UMat> maskVector;
     maskVector.push_back(mask1);
     maskVector.push_back(mask2);
 
-    Ptr<cv::detail::ExposureCompensator> compensator = cv::detail::ExposureCompensator::createDefault(detail::ExposureCompensator::GAIN_BLOCKS);
+    Ptr<detail::ExposureCompensator> compensator = detail::ExposureCompensator::createDefault(detail::ExposureCompensator::GAIN_BLOCKS);
     compensator->feed(pointVector, matVector, maskVector);
 
     compensator->apply(0,c1,p1,mask1);
     compensator->apply(0,c2,p2,mask2);
 
     //convert umat to mat
-    im1 = p1.getMat(cv::ACCESS_RW);
-    im2 = p2.getMat(cv::ACCESS_RW);
+    p1.copyTo(im1);
+    p2.copyTo(im2);
 }

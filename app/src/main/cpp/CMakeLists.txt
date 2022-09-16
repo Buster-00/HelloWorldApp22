@@ -51,9 +51,13 @@ find_library( # Sets the name of the path variable.
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
+file(GLOB CVLIBS
+        ${OpenCV_DIR}/staticlibs/${ANDROID_ABI}/libopencv_stitching.a)
+
 target_link_libraries( # Specifies the target library.
         HelloWorldApp
         lib_opencv
+        ${CVLIBS}
         # Links the target library to the log library
 #        included in the NDK.
         ${log-lib} )
