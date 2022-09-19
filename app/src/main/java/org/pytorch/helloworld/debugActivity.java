@@ -178,7 +178,7 @@ public class debugActivity extends AppCompatActivity {
 //      imageView2.setImageBitmap(img_out);
 
         // use model to get the second mask
-        img_out = Bitmap.createScaledBitmap ( img_out , 224 , 224 , true ) ;
+        img_out = Bitmap.createScaledBitmap ( img_out , WIDETH_OF_BITMAP , HEIGHT_OF_BITMAP , true ) ;
         final Tensor inputTensor_2 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
 
@@ -189,7 +189,7 @@ public class debugActivity extends AppCompatActivity {
         final float[] tensor_array_2 = outputTensor_2.getDataAsFloatArray();
 
         //convert java array to Bitmap
-        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,224,224,255);
+        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,WIDETH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
         ImageView imageView2 = findViewById(R.id.img_view_2);
         imageView2.setImageBitmap(bmp_mask_2);
 /*
@@ -339,7 +339,7 @@ public class debugActivity extends AppCompatActivity {
             pixels[i*4+3]=(byte)(alpha&0xff);
         }
 //    bmp.setPixels(pixels, 0, width, 0, 0, width, height);
-        ByteBuffer BB = ByteBuffer.allocate(224*224*4);
+        ByteBuffer BB = ByteBuffer.allocate(512*384*4); //224*224*4
         BB.put(pixels);
         BB.position(0);
         bmp.copyPixelsFromBuffer(BB);

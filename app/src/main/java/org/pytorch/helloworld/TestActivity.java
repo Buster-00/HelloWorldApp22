@@ -441,7 +441,7 @@ public class TestActivity extends AppCompatActivity {
             pixels[i*4+3]=(byte)(alpha&0xff);
         }
 //    bmp.setPixels(pixels, 0, width, 0, 0, width, height);
-        ByteBuffer BB = ByteBuffer.allocate(224*224*4);
+        ByteBuffer BB = ByteBuffer.allocate(224*224*4); //512x384
         BB.put(pixels);
         BB.position(0);
         bmp.copyPixelsFromBuffer(BB);
