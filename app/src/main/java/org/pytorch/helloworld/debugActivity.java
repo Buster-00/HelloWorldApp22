@@ -114,7 +114,7 @@ public class debugActivity extends AppCompatActivity {
             int n=1;
 
             /*import image from uri*/
-            bitmap_import = BitmapFactory.decodeStream(getAssets().open("TestSample_3.jpg"));
+            bitmap_import = BitmapFactory.decodeStream(getAssets().open("img_HL_1.jpg"));
             //Resize the bitmap
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*WIDTH , n*HEIGHT , true ) ;
             imgHL1 = new Mat();
@@ -123,7 +123,7 @@ public class debugActivity extends AppCompatActivity {
             org.opencv.imgproc.Imgproc.cvtColor(imgHL1, imgHl1_2, Imgproc.COLOR_RGBA2GRAY);
 
             //process second image
-            bitmap_import = BitmapFactory.decodeStream(getAssets().open("TestSample_4.jpg"));
+            bitmap_import = BitmapFactory.decodeStream(getAssets().open("img_HL_2.jpg"));
 
             //Resize the bitmap2
             bitmap_import = Bitmap.createScaledBitmap ( bitmap_import, n*WIDTH , n*HEIGHT , true ) ;
