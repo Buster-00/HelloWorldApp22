@@ -16,10 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -35,7 +33,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.features2d.Features2d;
 import org.opencv.features2d.SIFT;
-import org.opencv.imgproc.Imgproc;
 import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
@@ -50,15 +47,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.security.cert.PolicyNode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Vector;
+
 import static org.pytorch.helloworld.Param.HEIGHT;
 import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
 import static org.pytorch.helloworld.Param.MODULE_NAME;
-import static org.pytorch.helloworld.Param.WIDETH_OF_BITMAP;
+import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
 import static org.pytorch.helloworld.Param.WIDTH;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -251,7 +247,7 @@ public class TestActivity extends AppCompatActivity {
         time_last += "\nmodel_begin:" + format.format(new Date());
 
         // use model to get the first mask
-        img_out = Bitmap.createScaledBitmap ( img_out , WIDETH_OF_BITMAP , HEIGHT_OF_BITMAP , true) ;
+        img_out = Bitmap.createScaledBitmap ( img_out , WIDTH_OF_BITMAP, HEIGHT_OF_BITMAP , true) ;
         final Tensor inputTensor_1 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
 
@@ -263,9 +259,17 @@ public class TestActivity extends AppCompatActivity {
         Log.e("Length of float arrya", String.valueOf(tensor_array_1.length));
 
         //convert java array to Bitmap
-        Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 ,WIDETH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
+        Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 , WIDTH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
         ImageView imageView = findViewById(R.id.image_view_1);
-        imageView.setImageBitmap(bmp_mask_1);
+
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                imageView.setImageBitmap(bmp_mask_1);
+            }
+        });
+
+
         Log.e("BitmapSize", bmp_mask_1.getWidth() + " " + bmp_mask_1.getHeight());
 
         //second image
@@ -275,7 +279,7 @@ public class TestActivity extends AppCompatActivity {
 //      imageView2.setImageBitmap(img_out);
 
         // use model to get the second mask
-        img_out = Bitmap.createScaledBitmap ( img_out , 224 , 224 , true ) ;
+        img_out = Bitmap.createScaledBitmap ( img_out , WIDTH_OF_BITMAP , HEIGHT_OF_BITMAP , true ) ;
         final Tensor inputTensor_2 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
 
@@ -286,9 +290,15 @@ public class TestActivity extends AppCompatActivity {
         final float[] tensor_array_2 = outputTensor_2.getDataAsFloatArray();
 
         //convert java array to Bitmap
-        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,224,224,255);
+        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,WIDTH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
         ImageView imageView2 = findViewById(R.id.img_view_2);
-        imageView2.setImageBitmap(bmp_mask_2);
+
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                imageView2.setImageBitmap(bmp_mask_2);;
+            }
+        });
 
         // set bitmap to transfer to the Crop activity
         bm = bmp_mask_1;
@@ -441,7 +451,7 @@ public class TestActivity extends AppCompatActivity {
             pixels[i*4+3]=(byte)(alpha&0xff);
         }
 //    bmp.setPixels(pixels, 0, width, 0, 0, width, height);
-        ByteBuffer BB = ByteBuffer.allocate(224*224*4);
+        ByteBuffer BB = ByteBuffer.allocate(WIDTH_OF_BITMAP*HEIGHT_OF_BITMAP*4); //512x384
         BB.put(pixels);
         BB.position(0);
         bmp.copyPixelsFromBuffer(BB);

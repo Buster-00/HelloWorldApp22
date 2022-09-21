@@ -7,10 +7,8 @@ import static org.pytorch.helloworld.MainActivity.validate;
 import static org.pytorch.helloworld.Param.HEIGHT;
 import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
 import static org.pytorch.helloworld.Param.MODULE_NAME;
-import static org.pytorch.helloworld.Param.WIDETH_OF_BITMAP;
+import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
 import static org.pytorch.helloworld.Param.WIDTH;
-import static camera.mCameraFragment.PICTURE_1;
-import static camera.mCameraFragment.PICTURE_2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +16,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -46,8 +43,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import camera.CameraParam;
 
 public class debugActivity extends AppCompatActivity {
 
@@ -154,7 +149,7 @@ public class debugActivity extends AppCompatActivity {
         time_last += "\nmodel_begin:" + format.format(new Date());
 
         // use model to get the first mask
-        img_out = Bitmap.createScaledBitmap ( img_out , WIDETH_OF_BITMAP , HEIGHT_OF_BITMAP , true) ;
+        img_out = Bitmap.createScaledBitmap ( img_out , WIDTH_OF_BITMAP, HEIGHT_OF_BITMAP , true) ;
         final Tensor inputTensor_1 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
 
@@ -166,7 +161,7 @@ public class debugActivity extends AppCompatActivity {
         Log.e("Length of float arrya", String.valueOf(tensor_array_1.length));
 
         //convert java array to Bitmap
-        Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 ,WIDETH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
+        Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 , WIDTH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
         ImageView imageView = findViewById(R.id.image_view_1);
         imageView.setImageBitmap(bmp_mask_1);
         Log.e("BitmapSize", bmp_mask_1.getWidth() + " " + bmp_mask_1.getHeight());
@@ -178,7 +173,7 @@ public class debugActivity extends AppCompatActivity {
 //      imageView2.setImageBitmap(img_out);
 
         // use model to get the second mask
-        img_out = Bitmap.createScaledBitmap ( img_out , 224 , 224 , true ) ;
+        img_out = Bitmap.createScaledBitmap ( img_out , WIDTH_OF_BITMAP, HEIGHT_OF_BITMAP , true ) ;
         final Tensor inputTensor_2 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
 
@@ -189,7 +184,7 @@ public class debugActivity extends AppCompatActivity {
         final float[] tensor_array_2 = outputTensor_2.getDataAsFloatArray();
 
         //convert java array to Bitmap
-        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,224,224,255);
+        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 , WIDTH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
         ImageView imageView2 = findViewById(R.id.img_view_2);
         imageView2.setImageBitmap(bmp_mask_2);
 /*
@@ -339,7 +334,7 @@ public class debugActivity extends AppCompatActivity {
             pixels[i*4+3]=(byte)(alpha&0xff);
         }
 //    bmp.setPixels(pixels, 0, width, 0, 0, width, height);
-        ByteBuffer BB = ByteBuffer.allocate(224*224*4);
+        ByteBuffer BB = ByteBuffer.allocate(WIDTH_OF_BITMAP * HEIGHT_OF_BITMAP * 4); //224*224*4
         BB.put(pixels);
         BB.position(0);
         bmp.copyPixelsFromBuffer(BB);
