@@ -20,7 +20,7 @@ public class FirstActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select);
+        setContentView(R.layout.activity_first);
 
         //set status bar
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -32,6 +32,7 @@ public class FirstActivity extends AppCompatActivity {
         FloatingActionButton btn_default = findViewById(R.id.btn_default);
         FloatingActionButton btn_camera = findViewById(R.id.btn_camera);
         FloatingActionButton btn_debug = findViewById(R.id.btn_debug);
+        FloatingActionButton btn_camera02 = findViewById(R.id.btn_camera02);
 
         //Bind onClick function
         btn_default.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +55,14 @@ public class FirstActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FirstActivity.this, debugActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_camera02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FirstActivity.this, Camera02Activity.class);
                 startActivity(intent);
             }
         });
