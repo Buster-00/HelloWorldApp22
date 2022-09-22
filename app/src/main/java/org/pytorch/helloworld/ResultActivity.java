@@ -37,7 +37,6 @@ public class ResultActivity extends AppCompatActivity {
 
         //initialize the widgets
         imageView = findViewById(R.id.imageView);
-        textView = findViewById(R.id.tv_coordinate);
 
         //process image
         processImage();
@@ -62,7 +61,6 @@ public class ResultActivity extends AppCompatActivity {
         //Seamless clone
         Mat result = user_mask_seamlessClone_java(imgRE1, imgRE2,
                 x, y, width, height);
-        textView.setText(x + ", " + y + ", " + width + ", " + height + "");
 
         //Bilateral Filter
         Mat temp = new Mat();
