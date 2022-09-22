@@ -24,7 +24,6 @@ public class FirstActivity extends AppCompatActivity {
 
         //set status bar
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
         //request permission
         requestPermission();
 

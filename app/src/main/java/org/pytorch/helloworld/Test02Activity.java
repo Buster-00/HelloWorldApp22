@@ -6,6 +6,7 @@ import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.Utils;
@@ -20,6 +21,7 @@ public class Test02Activity extends TestBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 
     @Override
