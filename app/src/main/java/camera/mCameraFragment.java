@@ -3,12 +3,10 @@ package camera;
 import static camera.CameraParam.getBitmapDegree;
 import static camera.CameraParam.rotateBitmapByDegree;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,17 +22,13 @@ import androidx.annotation.Nullable;
 
 import com.camerax.lib.CameraFragment;
 
-import org.pytorch.helloworld.CropActivity;
-import org.pytorch.helloworld.PostProcessActivity;
-import org.pytorch.helloworld.TestActivity;
+import org.pytorch.helloworld.TestBaseActivity;
 
 import com.camerax.lib.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 
 /*
     default size:4000x2250px
@@ -52,6 +46,7 @@ public class mCameraFragment extends CameraFragment {
 
     int pic_counter = 0;
 
+    Class<?> cls = TestBaseActivity.class;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
@@ -64,7 +59,7 @@ public class mCameraFragment extends CameraFragment {
                 if(mbundle.getString(PICTURE_1) != null && mbundle.getString(PICTURE_2) != null)
                 {
                     //Intent intent = new Intent(getActivity(), TestActivity.class);
-                    Intent intent = new Intent(getActivity(), TestActivity.class);
+                    Intent intent = new Intent(getActivity(), cls);
                     intent.putExtras(mbundle);
                     startActivity(intent);
                     getActivity().finish();
@@ -81,6 +76,10 @@ public class mCameraFragment extends CameraFragment {
         mbundle = new Bundle();
 
         return view;
+    }
+
+    public void setOnCheckClass( Class<?> cls){
+        this.cls = cls;
     }
 
     @Override

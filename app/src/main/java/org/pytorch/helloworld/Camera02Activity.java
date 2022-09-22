@@ -10,7 +10,7 @@ public class Camera02Activity extends CameraActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-
+        cfg.setOnCheckClass(Test02Activity.class);
 
     }
 }

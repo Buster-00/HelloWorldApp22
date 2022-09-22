@@ -22,7 +22,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -33,11 +32,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.features2d.Features2d;
 import org.opencv.features2d.SIFT;
-import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
-import org.pytorch.Tensor;
-import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,7 +45,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import static org.pytorch.helloworld.Param.HEIGHT;
 import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
@@ -61,7 +56,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import camera.CameraParam;
 
-public class TestActivity extends AppCompatActivity {
+public class TestBaseActivity extends AppCompatActivity {
+
+    //module
+    protected Module module = null;
 
     //Thread
     Thread mThread;
@@ -84,7 +82,11 @@ public class TestActivity extends AppCompatActivity {
     private SIFT sift = SIFT.create();
     private FloatBuffer mInputTensorBuffer;
     private int[] inputArray= new int[224*224]  ;
-    private Mat imgHL1_original, imgHL2_original, imgHL1,imgHL2,imgRE1,imgRE2;
+    protected Mat imgHL1_original, imgHL2_original, imgHL1,imgHL2,imgRE1,imgRE2;
+    protected Mat imgRE1_crop_2;
+    protected Mat imgRE1_crop_1;
+    protected SimpleDateFormat format;
+    protected String time_last;
 
     //native funciton
     private native int[] Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
@@ -109,7 +111,7 @@ public class TestActivity extends AppCompatActivity {
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
                     byte[] bytes = out.toByteArray();
-                    Intent intent = new Intent(TestActivity.this, CropActivity.class);
+                    Intent intent = new Intent(TestBaseActivity.this, CropActivity.class);
                     intent.putExtra("bp", bytes);
                     startActivity(intent);
                 }
@@ -139,14 +141,14 @@ public class TestActivity extends AppCompatActivity {
 
     }
 
-    private void processFunc()
+    protected void processFunc()
     {
         boolean success = OpenCVLoader.initDebug();
         String xx =stringFromJNI();
         String yy =validate(3,5);
         String zz =testForNumcpp();
         Bitmap bitmap = null;
-        Module module = null;
+
 
         //Load high light detection model
         try {
@@ -160,8 +162,8 @@ public class TestActivity extends AppCompatActivity {
         /* ----make second mask*/
 
         Bitmap bitmap_import= null;
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-        String time_last= "timestamp:" + format.format(new Date());
+        format = new SimpleDateFormat("HH:mm:ss");
+        time_last = "timestamp:" + format.format(new Date());
 
         try {
             //define n = 1
@@ -200,16 +202,16 @@ public class TestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//    imgRE1,imgRE2
-//    int width = imgHL1_original.width();
-//    int height = imgHL1_original.height();
+//      imgRE1,imgRE2
+//      int width = imgHL1_original.width();
+//      int height = imgHL1_original.height();
         int width = imgHL1.width();
         int height = imgHL1.height();
         time_last += "\nre_begin:" + format.format(new Date());
         imgRE1 = new Mat();
         imgRE2 = new Mat();
-//    Imgproc.cvtColor(imgHL1 , imgHL1 ,  COLOR_RGBA2RGB);
-//    Imgproc.cvtColor(imgHL2 , imgHL2 ,  COLOR_RGBA2RGB);
+//      Imgproc.cvtColor(imgHL1 , imgHL1 ,  COLOR_RGBA2RGB);
+//      Imgproc.cvtColor(imgHL2 , imgHL2 ,  COLOR_RGBA2RGB);
 
         //Registration
         registration(imgHL1.getNativeObjAddr(), imgHL2.getNativeObjAddr(),imgRE1.getNativeObjAddr(),imgRE2.getNativeObjAddr());
@@ -223,85 +225,12 @@ public class TestActivity extends AppCompatActivity {
             Log.e("array", " " + i);
         }
         Rect roi = new Rect(new Point(coordinates[2], coordinates[0]), new Point(coordinates[3], coordinates[1]));
-        Mat imgRE1_crop_1 = new Mat(imgRE1, roi);
-        Mat imgRE1_crop_2 = new Mat(imgRE2, roi);
+        imgRE1_crop_1 = new Mat(imgRE1, roi);
+        imgRE1_crop_2 = new Mat(imgRE2, roi);
 
         //Exposure compensator
         exposure_compensator(imgRE1_crop_1.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
 
-        //turn to another activity
-        Intent intent = new Intent(TestActivity.this, MatActivity.class);
-        HashMap<String, Mat> hashMap_mat = new HashMap<>();
-        hashMap_mat.put("imgRE1", imgRE1_crop_1);
-        hashMap_mat.put("imgRE2", imgRE1_crop_2);
-        Data_app data_app = (Data_app) getApplication();
-        data_app.setHashMap_Mats(hashMap_mat);
-        startActivity(intent);
-        finish();
-
-        time_last += "\nre_end:" + format.format(new Date());
-
-        // get imgRE1 and imgRE2 to yield to mask
-        Bitmap img_out = Bitmap.createBitmap(imgRE1.cols(),imgRE1.rows(),Bitmap.Config.ARGB_8888);// = floatArrayToBitmap(scores,224,224,255);;
-        Utils.matToBitmap(imgRE1,img_out);
-        time_last += "\nmodel_begin:" + format.format(new Date());
-
-        // use model to get the first mask
-        img_out = Bitmap.createScaledBitmap ( img_out , WIDTH_OF_BITMAP, HEIGHT_OF_BITMAP , true) ;
-        final Tensor inputTensor_1 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
-                TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
-
-        final  IValue[] iValue_1=module.forward(IValue.from(inputTensor_1)).toTuple();
-        final Tensor outputTensor_1 = iValue_1[0].toTensor();
-
-        // getting tensor content as java array of floats
-        final float[] tensor_array_1 = outputTensor_1.getDataAsFloatArray();
-        Log.e("Length of float arrya", String.valueOf(tensor_array_1.length));
-
-        //convert java array to Bitmap
-        Bitmap bmp_mask_1=floatArrayToBitmap(tensor_array_1 , WIDTH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
-        ImageView imageView = findViewById(R.id.image_view_1);
-
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                imageView.setImageBitmap(bmp_mask_1);
-            }
-        });
-
-
-        Log.e("BitmapSize", bmp_mask_1.getWidth() + " " + bmp_mask_1.getHeight());
-
-        //second image
-        img_out = Bitmap.createBitmap(imgRE2.cols(),imgRE2.rows(),Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(imgRE2,img_out);
-//      ImageView imageView2 = findViewById(R.id.img_view_2);
-//      imageView2.setImageBitmap(img_out);
-
-        // use model to get the second mask
-        img_out = Bitmap.createScaledBitmap ( img_out , WIDTH_OF_BITMAP , HEIGHT_OF_BITMAP , true ) ;
-        final Tensor inputTensor_2 = TensorImageUtils.bitmapToFloat32Tensor(img_out,
-                TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);//, MemoryFormat.CHANNELS_LAST
-
-        final  IValue[] iValue_2 = module.forward(IValue.from(inputTensor_2)).toTuple();
-        final Tensor outputTensor_2 = iValue_2[0].toTensor();
-
-        // getting tensor content as java array of floats
-        final float[] tensor_array_2 = outputTensor_2.getDataAsFloatArray();
-
-        //convert java array to Bitmap
-        Bitmap bmp_mask_2=floatArrayToBitmap(tensor_array_2 ,WIDTH_OF_BITMAP,HEIGHT_OF_BITMAP,255);
-        ImageView imageView2 = findViewById(R.id.img_view_2);
-
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                imageView2.setImageBitmap(bmp_mask_2);;
-            }
-        });
-
-        // set bitmap to transfer to the Crop activity
-        bm = bmp_mask_1;
 
 
 /*
@@ -425,7 +354,7 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap floatArrayToBitmap(float[] floatArray, int width, int height, int alpha) {
+    protected Bitmap floatArrayToBitmap(float[] floatArray, int width, int height, int alpha) {
 
         // Create empty bitmap in RGBA format
         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -502,7 +431,13 @@ public class TestActivity extends AppCompatActivity {
     {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Processing the image");
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
+    }
+
+    private void onCompleteWrap()
+    {
+
     }
 
 }

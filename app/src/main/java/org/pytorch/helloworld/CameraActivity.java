@@ -38,6 +38,9 @@ public class CameraActivity extends AppCompatActivity {
     //widget
     ImageView img_view_1;
     ImageView img_view_2;
+
+    //Fragment
+    mCameraFragment cfg;
     
     //picture taken counter
     int pic_counter = 0;
@@ -58,7 +61,8 @@ public class CameraActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        final mCameraFragment cfg = new mCameraFragment();
+        cfg = new mCameraFragment();
+        cfg.setOnCheckClass(Test01Activity.class);
 
         CameraOption option = new CameraOption.Builder(ExAspectRatio.RATIO_16_9)
                 .faceFront(false)
