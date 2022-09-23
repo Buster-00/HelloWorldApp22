@@ -2,6 +2,7 @@ package com.camerax.lib.core;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -44,7 +45,6 @@ import java.io.File;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
@@ -434,6 +434,8 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
     public void takePhoto() {
         final File file = !TextUtils.isEmpty(mOutFilePath) ? new File(mOutFilePath) : CameraUtil.getOutFile(mContext);
         savePhotoToFile(file);
+        final File file02 = !TextUtils.isEmpty(mOutFilePath) ? new File(mOutFilePath) : CameraUtil.getOutFile(mContext);
+        savePhotoToFile_flashLight(file02);
     }
 
     @Override
@@ -476,16 +478,21 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
                     }
                 });
 
-        //take second image
 
 
+    }
 
-        android.os.Handler handler = new android.os.Handler();
+    private void savePhotoToFile_flashLight(final File file) {
+        ImageCapture.Metadata metadata = new ImageCapture.Metadata();
+        metadata.setReversedHorizontal(mCameraParam.faceFront);
+        ImageCapture.OutputFileOptions outputFileOptions =
+                new ImageCapture.OutputFileOptions.Builder(file).setMetadata(metadata).build();
+
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 openFlashLight();
-
                 mImageCapture.takePicture(outputFileOptions, mExecutor,
                         new ImageCapture.OnImageSavedCallback() {
                             @Override
@@ -507,7 +514,7 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
                             }
                         });
             }
-        },1600);
+        }, 1600);
 
     }
 
