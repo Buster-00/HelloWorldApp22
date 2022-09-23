@@ -44,6 +44,7 @@ import java.io.File;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Handler;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
@@ -450,6 +451,10 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
         metadata.setReversedHorizontal(mCameraParam.faceFront);
         ImageCapture.OutputFileOptions outputFileOptions =
                 new ImageCapture.OutputFileOptions.Builder(file).setMetadata(metadata).build();
+
+        //Take first picture
+        closeFlashLight();
+
         mImageCapture.takePicture(outputFileOptions, mExecutor,
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
@@ -470,6 +475,40 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
                         Toast.makeText(mContext, R.string.take_photo_fail, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        //take second image
+
+
+
+        android.os.Handler handler = new android.os.Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                openFlashLight();
+
+                mImageCapture.takePicture(outputFileOptions, mExecutor,
+                        new ImageCapture.OnImageSavedCallback() {
+                            @Override
+                            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                                Uri result = outputFileResults.getSavedUri();
+                                if (result == null) {
+                                    result = Uri.fromFile(file);
+                                }
+
+                                if (mOnCameraListener != null) {
+                                    mOnCameraListener.onTaken(result);
+                                }
+                            }
+
+                            @Override
+                            public void onError(@NonNull ImageCaptureException exception) {
+                                Log.e(TAG, exception.getMessage());
+                                Toast.makeText(mContext, R.string.take_photo_fail, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        },1600);
+
     }
 
     /**
