@@ -1,5 +1,6 @@
 package org.pytorch.helloworld;
 
+import static org.opencv.photo.Photo.fastNlMeansDenoising;
 import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
 import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
 
@@ -10,6 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.photo.Photo.*;
 import org.pytorch.IValue;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
@@ -81,6 +85,22 @@ public class Test02Activity extends TestBaseActivity {
                 progressDialog.dismiss();
             }
         });
+
+        //detect the high light area
+        detectHighlightArea();
+
+    }
+
+    void detectHighlightArea(Mat img){
+
+        //bright threshold
+        double bright_threshold = 120;
+
+        //Denoising
+        fastNlMeansDenoising(img, img);
+
+        //Get a binary image out of a grayscale image
+        Imgproc.threshold(img, img, bright_threshold, Imgproc.THRESH_BINARY);
 
     }
 }
