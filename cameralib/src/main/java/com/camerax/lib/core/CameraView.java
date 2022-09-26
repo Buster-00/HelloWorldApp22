@@ -66,6 +66,11 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
         CameraPreview.CameraGestureListener, CameraXConfig.Provider {
     private final static String TAG = "CameraView";
 
+    public void setTakeTwo(boolean takeTwo) {
+        TakeTwo = takeTwo;
+    }
+
+    private boolean TakeTwo = true;
     /**
      * 当前相机预览参数
      */
@@ -432,6 +437,16 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
 
     @Override
     public void takePhoto() {
+        if(TakeTwo){
+            takeTwoPhoto();
+        }
+        else{
+            final File file = !TextUtils.isEmpty(mOutFilePath) ? new File(mOutFilePath) : CameraUtil.getOutFile(mContext);
+            savePhotoToFile(file);
+        }
+    }
+
+    public void takeTwoPhoto(){
         final File file = !TextUtils.isEmpty(mOutFilePath) ? new File(mOutFilePath) : CameraUtil.getOutFile(mContext);
         savePhotoToFile(file);
         final File file02 = !TextUtils.isEmpty(mOutFilePath) ? new File(mOutFilePath) : CameraUtil.getOutFile(mContext);
