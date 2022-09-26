@@ -75,7 +75,7 @@ public class CropImageView extends ImageView {
     // An edge of the crop window will snap to the corresponding edge of a
     // specified bounding box when the crop window edge is less than or equal to
     // this distance (in pixels) away from the bounding box edge.
-    private float mSnapRadius;
+    public float mSnapRadius;
 
     // Thickness of the line (in pixels) used to draw the corner handle.
     private float mCornerThickness;
@@ -88,7 +88,7 @@ public class CropImageView extends ImageView {
 
     // The bounding box around the Bitmap that we are cropping.
     @NonNull
-    private RectF mBitmapRect = new RectF();
+    public RectF mBitmapRect = new RectF();
 
     // Holds the x and y offset between the exact touch location and the exact
     // handle location that is activated. There may be an offset because we
@@ -99,7 +99,7 @@ public class CropImageView extends ImageView {
     private PointF mTouchOffset = new PointF();
 
     // The Handle that is currently pressed; null if no Handle is pressed.
-    private Handle mPressedHandle;
+    public Handle mPressedHandle;
 
     // Flag indicating if the crop area should always be a certain aspect ratio (indicated by mTargetAspectRatio).
     private boolean mFixAspectRatio;

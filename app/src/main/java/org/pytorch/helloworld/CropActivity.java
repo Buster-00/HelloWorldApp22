@@ -64,6 +64,8 @@ public class CropActivity extends AppCompatActivity {
         cropImageView.setAspectRatio(5, 10);
         cropImageView.setFixedAspectRatio(false);
         cropImageView.setGuidelines(1);
+        
+        //cropImageView.mPressedHandle.updateCropWindow(10,10,cropImageView.mBitmapRect, cropImageView.mSnapRadius);
 
         //get image uri
         Data_app data_app = (Data_app) getApplication();
