@@ -86,21 +86,8 @@ public class Test02Activity extends TestBaseActivity {
             }
         });
 
-        //detect the high light area
-        detectHighlightArea();
 
     }
 
-    void detectHighlightArea(Mat img){
 
-        //bright threshold
-        double bright_threshold = 120;
-
-        //Denoising
-        fastNlMeansDenoising(img, img);
-
-        //Get a binary image out of a grayscale image
-        Imgproc.threshold(img, img, bright_threshold, Imgproc.THRESH_BINARY);
-
-    }
 }
