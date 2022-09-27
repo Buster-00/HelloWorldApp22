@@ -356,7 +356,6 @@ public class CropImageView extends ImageView {
     private void initCropWindow(@NonNull RectF bitmapRect) {
 
         if (mFixAspectRatio) {
-
             // Initialize the crop window with the proper aspect ratio.
             initCropWindowWithFixedAspectRatio(bitmapRect);
 
@@ -568,5 +567,9 @@ public class CropImageView extends ImageView {
     public void setOnCropListener(OnCropListener listener)
     {
         mOnCropListener = listener;
+    }
+
+    public void setCoordinates(float x, float y, float w, float h){
+        
     }
 }

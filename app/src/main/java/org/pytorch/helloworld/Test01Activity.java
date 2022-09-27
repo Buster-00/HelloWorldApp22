@@ -43,16 +43,27 @@ public class Test01Activity extends TestBaseActivity {
 
         //turn to another activity
         Intent intent = new Intent(Test01Activity.this, MatActivity.class);
+
+        //put rect x, y, w, h
+        intent.putExtra("x", rect.x);
+        intent.putExtra("y", rect.y);
+        intent.putExtra("w", rect.width);
+        intent.putExtra("h", rect.height);
+
+        //put mat data into Data_app
         HashMap<String, Mat> hashMap_mat = new HashMap<>();
         hashMap_mat.put("imgRE1", imgRE1_crop_1);
         hashMap_mat.put("imgRE2", imgRE1_crop_2);
         Data_app data_app = (Data_app) getApplication();
         data_app.setHashMap_Mats(hashMap_mat);
+
+        //start activity
         startActivity(intent);
         finish();
     }
 
 
+    //detect the high light area
     Rect detectHighlightArea(Mat src){
 
         Mat img = new Mat();

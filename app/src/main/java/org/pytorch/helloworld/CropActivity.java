@@ -61,10 +61,17 @@ public class CropActivity extends AppCompatActivity {
         RelativeLayout relativeLayout = findViewById(R.id.Layout_relative);
         Log.e("width", ""+relativeLayout.getWidth());
 
+        //get rect x, y, w, h
+        int x = getIntent().getIntExtra("x",0);
+        int y = getIntent().getIntExtra("y",0);
+        int width = getIntent().getIntExtra("w",0);
+        int height = getIntent().getIntExtra("h",0);
+
         cropImageView.setAspectRatio(5, 10);
         cropImageView.setFixedAspectRatio(false);
         cropImageView.setGuidelines(1);
-        
+        cropImageView.setCoordinates(x, y, width, height);
+
         //cropImageView.mPressedHandle.updateCropWindow(10,10,cropImageView.mBitmapRect, cropImageView.mSnapRadius);
 
         //get image uri
@@ -82,12 +89,7 @@ public class CropActivity extends AppCompatActivity {
         cropImageView.setOnCropListener(new OnCropListener() {
             @Override
             public void onCrop(int cropX, int cropY, int cropWidth, int cropHeight) {
-                Log.e("cord", cropX + " " + cropY + " " + cropWidth + " " + cropHeight);
-                x = cropX;
-                y = cropY;
-                width = cropWidth;
-                height = cropHeight;
-                coordinates = "(" + cropX + ", " + cropY + ", " + cropWidth + ", " + cropHeight + ")";
+
             }
         });
 
