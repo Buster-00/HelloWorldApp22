@@ -56,6 +56,9 @@ public class CropImageView extends ImageView {
 
     // Member Variables ////////////////////////////////////////////////////////////////////////////
 
+    //initialize coordiante x, y, w, h
+    float x, y, w, h;
+
     // The Paint used to draw the white rectangle around the crop area.
     private Paint mBorderPaint;
 
@@ -365,10 +368,14 @@ public class CropImageView extends ImageView {
             final float horizontalPadding = 0.1f * bitmapRect.width();
             final float verticalPadding = 0.1f * bitmapRect.height();
 
-            Edge.LEFT.setCoordinate(bitmapRect.left + horizontalPadding);
-            Edge.TOP.setCoordinate(bitmapRect.top + verticalPadding);
-            Edge.RIGHT.setCoordinate(bitmapRect.right - horizontalPadding);
-            Edge.BOTTOM.setCoordinate(bitmapRect.bottom - verticalPadding);
+//            Edge.LEFT.setCoordinate(bitmapRect.left + horizontalPadding);
+//            Edge.TOP.setCoordinate(bitmapRect.top + verticalPadding);
+//            Edge.RIGHT.setCoordinate(bitmapRect.right - horizontalPadding);
+//            Edge.BOTTOM.setCoordinate(bitmapRect.bottom - verticalPadding);
+            Edge.LEFT.setCoordinate(bitmapRect.left + x);
+            Edge.TOP.setCoordinate(bitmapRect.top + y);
+            Edge.RIGHT.setCoordinate(bitmapRect.left + x + w);
+            Edge.BOTTOM.setCoordinate(bitmapRect.top + y + h);
         }
     }
 
@@ -570,6 +577,9 @@ public class CropImageView extends ImageView {
     }
 
     public void setCoordinates(float x, float y, float w, float h){
-        
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
     }
 }

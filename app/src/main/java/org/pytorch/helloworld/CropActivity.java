@@ -62,22 +62,23 @@ public class CropActivity extends AppCompatActivity {
         Log.e("width", ""+relativeLayout.getWidth());
 
         //get rect x, y, w, h
-        int x = getIntent().getIntExtra("x",0);
-        int y = getIntent().getIntExtra("y",0);
-        int width = getIntent().getIntExtra("w",0);
-        int height = getIntent().getIntExtra("h",0);
+        x = getIntent().getIntExtra("x",0);
+        y = getIntent().getIntExtra("y",0);
+        width = getIntent().getIntExtra("w",0);
+        height = getIntent().getIntExtra("h",0);
 
+        cropImageView.setCoordinates(x, y, width, height);
         cropImageView.setAspectRatio(5, 10);
         cropImageView.setFixedAspectRatio(false);
         cropImageView.setGuidelines(1);
-        cropImageView.setCoordinates(x, y, width, height);
+
 
         //cropImageView.mPressedHandle.updateCropWindow(10,10,cropImageView.mBitmapRect, cropImageView.mSnapRadius);
 
         //get image uri
         Data_app data_app = (Data_app) getApplication();
         HashMap<String, Mat> hashMap_mats = data_app.getHashMap_Mats();
-        Mat imgRE1 = hashMap_mats.get("imgRE1");
+        Mat imgRE1 = hashMap_mats.get("imgRE2");
 
         //set image (imgRE1)
         Bitmap bm = Bitmap.createBitmap(imgRE1.cols(), imgRE1.rows(), Bitmap.Config.ARGB_8888);
@@ -89,7 +90,10 @@ public class CropActivity extends AppCompatActivity {
         cropImageView.setOnCropListener(new OnCropListener() {
             @Override
             public void onCrop(int cropX, int cropY, int cropWidth, int cropHeight) {
-
+                x = cropX;
+                y = cropY;
+                width = cropWidth;
+                height = cropHeight;
             }
         });
 

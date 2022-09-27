@@ -39,16 +39,17 @@ public class Test01Activity extends TestBaseActivity {
 
         //detect high light area with OpenCV technique
         Rect rect = detectHighlightArea(imgRE1_crop_2);
-        rectangle(imgRE1_crop_2, rect, new Scalar(255,0,0,1), 5);
 
         //turn to another activity
         Intent intent = new Intent(Test01Activity.this, MatActivity.class);
 
         //put rect x, y, w, h
-        intent.putExtra("x", rect.x);
-        intent.putExtra("y", rect.y);
-        intent.putExtra("w", rect.width);
-        intent.putExtra("h", rect.height);
+        Bundle bundle = new Bundle();
+        bundle.putInt("x", rect.x);
+        bundle.putInt("y", rect.y);
+        bundle.putInt("w", rect.width);
+        bundle.putInt("h", rect.height);
+        intent.putExtras(bundle);
 
         //put mat data into Data_app
         HashMap<String, Mat> hashMap_mat = new HashMap<>();

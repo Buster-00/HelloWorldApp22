@@ -1,5 +1,7 @@
 package org.pytorch.helloworld;
 
+import static org.opencv.imgproc.Imgproc.rectangle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +14,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -43,12 +47,25 @@ public class MatActivity extends AppCompatActivity {
         Mat imgRE1 = hashMap_mat.get("imgRE1");
         Mat imgRE2 = hashMap_mat.get("imgRE2");
 
+        //copy
+        Mat imgRE2_cop = new Mat();
+        imgRE2.copyTo(imgRE2_cop);
+
+        int x = getIntent().getExtras().getInt("x");
+        int y = getIntent().getExtras().getInt("y");
+        int w = getIntent().getExtras().getInt("w");
+        int h = getIntent().getExtras().getInt("h");
+
+        Rect rect = new Rect(x,y,w,h);
+        rectangle(imgRE2_cop, rect, new Scalar(255,0,0,1), 5);
+
         //transfer the mat to bitmap
         Bitmap bm_RE1 = Bitmap.createBitmap(imgRE1.cols(), imgRE1.rows(),Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(imgRE1, bm_RE1);
 
-        Bitmap bm_RE2 = Bitmap.createBitmap(imgRE2.cols(), imgRE2.rows(),Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(imgRE2, bm_RE2);
+        Bitmap bm_RE2 = Bitmap.createBitmap(imgRE2_cop.cols(), imgRE2_cop.rows(),Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(imgRE2_cop, bm_RE2);
+
 
         //set image view
         imageView_1.setImageBitmap(bm_RE1);
@@ -60,6 +77,7 @@ public class MatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MatActivity.this, CropActivity.class);
+                intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
             }
         });
