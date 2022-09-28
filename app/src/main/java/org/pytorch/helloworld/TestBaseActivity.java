@@ -83,10 +83,11 @@ public class TestBaseActivity extends AppCompatActivity {
     private FloatBuffer mInputTensorBuffer;
     private int[] inputArray= new int[224*224]  ;
     protected Mat imgHL1_original, imgHL2_original, imgHL1,imgHL2,imgRE1,imgRE2;
-    protected Mat imgRE1_crop_2;
-    protected Mat imgRE1_crop_1;
+    protected Mat imgRE2_crop_;
+    protected Mat imgRE1_crop_;
     protected SimpleDateFormat format;
     protected String time_last;
+
 
     //native funciton
     private native int[] Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
@@ -225,11 +226,11 @@ public class TestBaseActivity extends AppCompatActivity {
             Log.e("array", " " + i);
         }
         Rect roi = new Rect(new Point(coordinates[2], coordinates[0]), new Point(coordinates[3], coordinates[1]));
-        imgRE1_crop_1 = new Mat(imgRE1, roi);
-        imgRE1_crop_2 = new Mat(imgRE2, roi);
+        imgRE1_crop_ = new Mat(imgRE1, roi);
+        imgRE2_crop_ = new Mat(imgRE2, roi);
 
         //Exposure compensator
-        exposure_compensator(imgRE1_crop_1.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
+        exposure_compensator(imgRE1_crop_.getNativeObjAddr(), imgRE2_crop_.getNativeObjAddr());
 
 
 
