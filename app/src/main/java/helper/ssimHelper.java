@@ -15,6 +15,7 @@ import static org.opencv.imgproc.Imgproc.findContours;
 import static org.opencv.imgproc.Imgproc.rectangle;
 import static org.opencv.imgproc.Imgproc.threshold;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
@@ -32,6 +33,8 @@ public class ssimHelper {
         double C2 = 58.5225;
 
         //Get the multiple result
+        img1.convertTo(img1, CvType.CV_32F);
+        img2.convertTo(img2, CvType.CV_32F);
         Mat img1_2 = img1.mul(img1);
         Mat img2_2 = img2.mul(img2);
         Mat img1_img2 = img1.mul(img2);
