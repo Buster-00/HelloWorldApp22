@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ssimHelper {
+    private static final double THRESH = 247;
+
     static public void ssim(Mat i1, Mat i2){
 
         double C1 = 6.5025;
@@ -123,7 +125,7 @@ public class ssimHelper {
 
         //threshold
         Mat thresh = new Mat();
-        threshold(diff, thresh, 247, 255,THRESH_BINARY_INV);
+        threshold(diff, thresh, THRESH, 255,THRESH_BINARY_INV);
 
         //get contours
         List<MatOfPoint> cnts = new ArrayList<>();
