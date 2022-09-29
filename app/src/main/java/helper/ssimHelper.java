@@ -33,11 +33,14 @@ public class ssimHelper {
         double C2 = 58.5225;
 
         //Get the multiple result
-        img1.convertTo(img1, CvType.CV_32F);
-        img2.convertTo(img2, CvType.CV_32F);
-        Mat img1_2 = img1.mul(img1);
-        Mat img2_2 = img2.mul(img2);
-        Mat img1_img2 = img1.mul(img2);
+        img1.convertTo(img1, CvType.CV_32F,1/255.0);
+        img2.convertTo(img2, CvType.CV_32F,1/255.0);
+        Mat img1_2 = new Mat();
+        multiply(img1, img1, img1_2);
+        Mat img2_2 = new Mat();
+        multiply(img2, img2, img2_2);
+        Mat img1_img2 = new Mat();
+        multiply(img1, img2, img1_img2);
 
         //Preliminary computing
         Mat mu1 = new Mat();
@@ -60,13 +63,13 @@ public class ssimHelper {
 
         //t1 = 2 * mu1_mu2 + C1
         Mat t1 = new Mat();
-        multiply(mu1_mu2, new Scalar(2), t1);
-        add(t1, new Scalar(C1), t1);
+        multiply(mu1_mu2, new Scalar(2,2,2), t1);
+        add(t1, new Scalar(C1,C1,C1), t1);
 
         //t2 = 2 * sigma12 + C2
         Mat t2 = new Mat();
-        multiply(sigma12, new Scalar(2), t2);
-        add(t2, new Scalar(C2), t2);
+        multiply(sigma12, new Scalar(2,2,2), t2);
+        add(t2, new Scalar(C2,C2,C2), t2);
 
         //t3 = t1 * t2
         Mat t3 = new Mat();
@@ -74,11 +77,11 @@ public class ssimHelper {
 
         //t1 = mu1_2 + mu2_2 + C1
         add(mu1_2, mu2_2, t1);
-        add(t1, new Scalar(C1), t1);
+        add(t1, new Scalar(C1,C1,C1), t1);
 
         //t2 = sigma1_2 + sigma2_2 + C2
         add(sigma1_2, sigma2_2, t2);
-        add(t2, new Scalar(C2), t2);
+        add(t2, new Scalar(C2,C2,C2), t2);
 
         // t1 = t1 * t2
         multiply(t1, t2, t1);
@@ -92,7 +95,7 @@ public class ssimHelper {
 
         //get difference    diff = (ssim_map_gray * 255).astype("uint8")
         Mat diff = new Mat();
-        multiply(ssim_map, new Scalar(255), diff);
+        multiply(ssim_map, new Scalar(255, 255, 255), diff);
 
         //threshold
         Mat thresh = new Mat();
