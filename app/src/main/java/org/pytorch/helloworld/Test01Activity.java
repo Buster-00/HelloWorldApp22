@@ -12,6 +12,7 @@ import static helper.convexHullHelper.detectHighlightArea;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import org.opencv.core.Mat;
@@ -21,6 +22,8 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,6 +43,7 @@ public class Test01Activity extends TestBaseActivity {
         super.processFunc();
 
         //perform SSIM process
+        //FileInputStream in = new FileInputStream(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/"))
         ssimHelper.ssim(imgRE1_crop_, imgRE2_crop_);
 
         //detect high light area with OpenCV technique

@@ -1,8 +1,10 @@
 package helper;
 
+import static org.opencv.core.Core.NORM_MINMAX;
 import static org.opencv.core.Core.add;
 import static org.opencv.core.Core.divide;
 import static org.opencv.core.Core.multiply;
+import static org.opencv.core.Core.normalize;
 import static org.opencv.core.Core.subtract;
 import static org.opencv.imgproc.Imgproc.CHAIN_APPROX_NONE;
 import static org.opencv.imgproc.Imgproc.COLOR_BGR2GRAY;
@@ -15,6 +17,10 @@ import static org.opencv.imgproc.Imgproc.findContours;
 import static org.opencv.imgproc.Imgproc.rectangle;
 import static org.opencv.imgproc.Imgproc.threshold;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -23,15 +29,23 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ssimHelper {
-    static public void ssim(Mat img1, Mat img2){
+    static public void ssim(Mat i1, Mat i2){
 
         double C1 = 6.5025;
         double C2 = 58.5225;
 
+        Mat img1 = new Mat();
+        Mat img2 = new Mat();
+
+        i1.copyTo(img1);
+        i2.copyTo(img2);
         //Get the multiple result
         img1.convertTo(img1, CvType.CV_32F,1/255.0);
         img2.convertTo(img2, CvType.CV_32F,1/255.0);
@@ -92,14 +106,24 @@ public class ssimHelper {
 
         //convert ssim_map to gray image
         Imgproc.cvtColor(ssim_map, ssim_map, COLOR_BGR2GRAY);
+        Mat diff = new Mat();
 
         //get difference    diff = (ssim_map_gray * 255).astype("uint8")
-        Mat diff = new Mat();
-        multiply(ssim_map, new Scalar(255, 255, 255), diff);
+        ssim_map.convertTo(diff, CvType.CV_8U, 255.0);
+
+        //save diff to bitmap
+        Bitmap bitmap = Bitmap.createBitmap(diff.cols(), diff.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(diff, bitmap);
+        try {
+            FileOutputStream out = new FileOutputStream(new File("file:///storage/emulated/0/Android/data/org.pytorch.helloworld/files/Pictures/diff.jpg"));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         //threshold
         Mat thresh = new Mat();
-        threshold(diff, thresh, 100, 255,THRESH_BINARY_INV);
+        threshold(diff, thresh, 247, 255,THRESH_BINARY_INV);
 
         //get contours
         List<MatOfPoint> cnts = new ArrayList<>();
@@ -107,8 +131,8 @@ public class ssimHelper {
 
         for(MatOfPoint contour : cnts){
             Rect rect = boundingRect(contour);
-            rectangle(img1, rect, new Scalar(0,255,0), 4);
-            rectangle(img2, rect, new Scalar(0,255,0), 4);
+            rectangle(i1, rect, new Scalar(0,255,0), 4);
+            rectangle(i2, rect, new Scalar(0,255,0), 4);
         }
 
 

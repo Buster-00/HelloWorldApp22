@@ -9,6 +9,7 @@ import static org.opencv.photo.Photo.fastNlMeansDenoising;
 
 import android.util.Log;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
