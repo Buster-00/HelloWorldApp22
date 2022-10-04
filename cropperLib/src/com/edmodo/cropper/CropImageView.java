@@ -56,6 +56,9 @@ public class CropImageView extends ImageView {
 
     // Member Variables ////////////////////////////////////////////////////////////////////////////
 
+    //initialize coordiante x, y, w, h
+    float x, y, w, h;
+
     // The Paint used to draw the white rectangle around the crop area.
     private Paint mBorderPaint;
 
@@ -75,7 +78,7 @@ public class CropImageView extends ImageView {
     // An edge of the crop window will snap to the corresponding edge of a
     // specified bounding box when the crop window edge is less than or equal to
     // this distance (in pixels) away from the bounding box edge.
-    private float mSnapRadius;
+    public float mSnapRadius;
 
     // Thickness of the line (in pixels) used to draw the corner handle.
     private float mCornerThickness;
@@ -88,7 +91,7 @@ public class CropImageView extends ImageView {
 
     // The bounding box around the Bitmap that we are cropping.
     @NonNull
-    private RectF mBitmapRect = new RectF();
+    public RectF mBitmapRect = new RectF();
 
     // Holds the x and y offset between the exact touch location and the exact
     // handle location that is activated. There may be an offset because we
@@ -99,7 +102,7 @@ public class CropImageView extends ImageView {
     private PointF mTouchOffset = new PointF();
 
     // The Handle that is currently pressed; null if no Handle is pressed.
-    private Handle mPressedHandle;
+    public Handle mPressedHandle;
 
     // Flag indicating if the crop area should always be a certain aspect ratio (indicated by mTargetAspectRatio).
     private boolean mFixAspectRatio;
@@ -356,7 +359,6 @@ public class CropImageView extends ImageView {
     private void initCropWindow(@NonNull RectF bitmapRect) {
 
         if (mFixAspectRatio) {
-
             // Initialize the crop window with the proper aspect ratio.
             initCropWindowWithFixedAspectRatio(bitmapRect);
 
@@ -366,10 +368,14 @@ public class CropImageView extends ImageView {
             final float horizontalPadding = 0.1f * bitmapRect.width();
             final float verticalPadding = 0.1f * bitmapRect.height();
 
-            Edge.LEFT.setCoordinate(bitmapRect.left + horizontalPadding);
-            Edge.TOP.setCoordinate(bitmapRect.top + verticalPadding);
-            Edge.RIGHT.setCoordinate(bitmapRect.right - horizontalPadding);
-            Edge.BOTTOM.setCoordinate(bitmapRect.bottom - verticalPadding);
+//            Edge.LEFT.setCoordinate(bitmapRect.left + horizontalPadding);
+//            Edge.TOP.setCoordinate(bitmapRect.top + verticalPadding);
+//            Edge.RIGHT.setCoordinate(bitmapRect.right - horizontalPadding);
+//            Edge.BOTTOM.setCoordinate(bitmapRect.bottom - verticalPadding);
+            Edge.LEFT.setCoordinate(bitmapRect.left + x);
+            Edge.TOP.setCoordinate(bitmapRect.top + y);
+            Edge.RIGHT.setCoordinate(bitmapRect.left + x + w);
+            Edge.BOTTOM.setCoordinate(bitmapRect.top + y + h);
         }
     }
 
@@ -568,5 +574,12 @@ public class CropImageView extends ImageView {
     public void setOnCropListener(OnCropListener listener)
     {
         mOnCropListener = listener;
+    }
+
+    public void setCoordinates(float x, float y, float w, float h){
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
     }
 }

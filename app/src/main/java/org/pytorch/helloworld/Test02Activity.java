@@ -1,5 +1,6 @@
 package org.pytorch.helloworld;
 
+import static org.opencv.photo.Photo.fastNlMeansDenoising;
 import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
 import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
 
@@ -10,6 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.photo.Photo.*;
 import org.pytorch.IValue;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
@@ -82,5 +86,8 @@ public class Test02Activity extends TestBaseActivity {
             }
         });
 
+
     }
+
+
 }
