@@ -13,7 +13,7 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
-public class FirstActivity extends AppCompatActivity {
+public class InitActivity extends AppCompatActivity {
 
     String[] permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
@@ -37,7 +37,7 @@ public class FirstActivity extends AppCompatActivity {
         btn_default.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstActivity.this, MainActivity.class);
+                Intent intent = new Intent(InitActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -45,7 +45,7 @@ public class FirstActivity extends AppCompatActivity {
         btn_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstActivity.this, CameraActivity.class);
+                Intent intent = new Intent(InitActivity.this, CameraActivity.class);
                 startActivity(intent);
             }
         });
@@ -53,7 +53,7 @@ public class FirstActivity extends AppCompatActivity {
         btn_debug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FirstActivity.this, debugActivity.class);
+                Intent intent = new Intent(InitActivity.this, debugActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,7 +61,7 @@ public class FirstActivity extends AppCompatActivity {
         btn_camera02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FirstActivity.this, Camera02Activity.class);
+                Intent intent = new Intent(InitActivity.this, Camera02Activity.class);
                 startActivity(intent);
             }
         });

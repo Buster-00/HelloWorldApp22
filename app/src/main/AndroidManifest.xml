@@ -12,22 +12,19 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Test02Activity"
+            android:name=".ImageProc02Activity"
             android:exported="false" />
         <activity
-            android:name=".Test01Activity"
+            android:name=".ImageProc01Activity"
             android:exported="false" />
         <activity
             android:name=".Camera02Activity"
             android:exported="false" />
         <activity
-            android:name=".MatActivity"
+            android:name=".DisplayResultActivity"
             android:exported="false" />
         <activity
             android:name=".ResultActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ConstraintActivity"
             android:exported="false" />
         <activity
             android:name=".CropActivity"
@@ -36,7 +33,7 @@
             android:name=".debugActivity"
             android:exported="false" />
         <activity
-            android:name=".TestBaseActivity"
+            android:name=".ImageProcBaseActivity"
             android:exported="false" />
         <activity
             android:name=".PostProcessActivity"
@@ -45,7 +42,7 @@
             android:name=".CameraActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".FirstActivity">
+        <activity android:name=".InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

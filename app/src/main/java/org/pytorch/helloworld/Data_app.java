@@ -6,6 +6,10 @@ import org.opencv.core.Mat;
 
 import java.util.HashMap;
 
+/*
+    用于在activity之间传输数据
+ */
+
 public class Data_app extends Application {
 
     private HashMap<String, Mat> hashMap_Mats;

@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.camerax.lib.CameraConstant;
@@ -43,7 +42,7 @@ public class Camera02Activity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
 
         cfg = new mCameraFragment(true);
-        cfg.setOnCheckClass(Test01Activity.class);
+        cfg.setOnCheckClass(ImageProc01Activity.class);
 
         CameraOption option = new CameraOption.Builder(ExAspectRatio.RATIO_16_9)
                 .faceFront(false)

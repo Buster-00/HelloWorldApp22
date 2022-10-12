@@ -11,16 +11,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.Utils;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.photo.Photo.*;
 import org.pytorch.IValue;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.util.Date;
 
-public class Test02Activity extends TestBaseActivity {
+public class ImageProc02Activity extends ImageProcBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +26,7 @@ public class Test02Activity extends TestBaseActivity {
     }
 
     @Override
-    protected void processFunc() {
-        super.processFunc();
+    protected void postProcess() {
         time_last += "\nre_end:" + format.format(new Date());
 
         // get imgRE1 and imgRE2 to yield to mask
@@ -85,8 +81,6 @@ public class Test02Activity extends TestBaseActivity {
                 progressDialog.dismiss();
             }
         });
-
-
     }
 
 

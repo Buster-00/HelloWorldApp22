@@ -18,9 +18,8 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 
 import java.util.HashMap;
-import java.util.Vector;
 
-public class MatActivity extends AppCompatActivity {
+public class DisplayResultActivity extends AppCompatActivity {
 
     //widget
     ImageView imageView_1;
@@ -76,7 +75,7 @@ public class MatActivity extends AppCompatActivity {
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MatActivity.this, CropActivity.class);
+                Intent intent = new Intent(DisplayResultActivity.this, CropActivity.class);
                 intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
             }

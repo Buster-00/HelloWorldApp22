@@ -1,31 +1,15 @@
 package org.pytorch.helloworld;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.camerax.lib.CameraConstant;
 import com.camerax.lib.core.CameraOption;
 import com.camerax.lib.core.ExAspectRatio;
-import com.camerax.lib.core.OnCameraListener;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import camera.mCameraFragment;
 
@@ -62,7 +46,7 @@ public class CameraActivity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
 
         cfg = new mCameraFragment(false);
-        cfg.setOnCheckClass(Test01Activity.class);
+        cfg.setOnCheckClass(ImageProc01Activity.class);
 
         CameraOption option = new CameraOption.Builder(ExAspectRatio.RATIO_16_9)
                 .faceFront(false)

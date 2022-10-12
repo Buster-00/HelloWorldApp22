@@ -56,7 +56,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import camera.CameraParam;
 
-public class TestBaseActivity extends AppCompatActivity {
+public abstract class ImageProcBaseActivity extends AppCompatActivity {
 
     //module
     protected Module module = null;
@@ -94,6 +94,9 @@ public class TestBaseActivity extends AppCompatActivity {
 
     private native void exposure_compensator(long im1_p_addr, long im2_p_addr);
 
+    //abstract process function
+    protected abstract void postProcess();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +115,7 @@ public class TestBaseActivity extends AppCompatActivity {
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
                     byte[] bytes = out.toByteArray();
-                    Intent intent = new Intent(TestBaseActivity.this, CropActivity.class);
+                    Intent intent = new Intent(ImageProcBaseActivity.this, CropActivity.class);
                     intent.putExtra("bp", bytes);
                     startActivity(intent);
                 }
@@ -232,6 +235,8 @@ public class TestBaseActivity extends AppCompatActivity {
         //Exposure compensator
         exposure_compensator(imgRE1_crop_.getNativeObjAddr(), imgRE2_crop_.getNativeObjAddr());
 
+        //post process
+        postProcess();
 
 
 /*

@@ -649,9 +649,9 @@ void mosaic_global_v1(Mat &im1, Mat &im2, nc::NdArray<double> &H, Mat &im1_p, Ma
 
 extern "C"
 JNIEXPORT jintArray JNICALL
-Java_org_pytorch_helloworld_TestBaseActivity_Clip(JNIEnv *env, jobject thiz, jlong im2_small_addr,
-                                                  jlong im1_p_addr, jlong im2_p_addr,
-                                                  jlong im1_crop_addr, jlong im2_crop_addr  ) {
+Java_org_pytorch_helloworld_ImageProcBaseActivity_Clip(JNIEnv *env, jobject thiz, jlong im2_small_addr,
+                                                       jlong im1_p_addr, jlong im2_p_addr,
+                                                       jlong im1_crop_addr, jlong im2_crop_addr  ) {
 
     Mat& im2_small = *(Mat*)im2_small_addr;
     Mat& im1_p = *(Mat*)im1_p_addr;
@@ -695,8 +695,8 @@ Java_org_pytorch_helloworld_TestBaseActivity_Clip(JNIEnv *env, jobject thiz, jlo
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_org_pytorch_helloworld_TestBaseActivity_exposure_1compensator(JNIEnv *env, jobject thiz,
-                                                                   jlong im1_p_addr, jlong im2_p_addr) {
+Java_org_pytorch_helloworld_ImageProcBaseActivity_exposure_1compensator(JNIEnv *env, jobject thiz,
+                                                                        jlong im1_p_addr, jlong im2_p_addr) {
     // TODO: implement exposure_compensator()
     Mat& im1 = *(Mat*)im1_p_addr;
     Mat& im2 = *(Mat*)im2_p_addr;

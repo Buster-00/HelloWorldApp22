@@ -1,8 +1,5 @@
 package org.pytorch.helloworld;
 
-import static org.opencv.core.Core.findNonZero;
-import static org.opencv.imgproc.Imgproc.COLOR_BGR2GRAY;
-import static org.opencv.imgproc.Imgproc.boundingRect;
 import static org.opencv.imgproc.Imgproc.convexHull;
 import static org.opencv.imgproc.Imgproc.cvtColor;
 import static org.opencv.imgproc.Imgproc.rectangle;
@@ -12,35 +9,23 @@ import static helper.convexHullHelper.detectHighlightArea;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.imgproc.Imgproc;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import helper.ssimHelper;
 
-public class Test01Activity extends TestBaseActivity {
+public class ImageProc01Activity extends ImageProcBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+    
     @Override
-    protected void processFunc() {
-
-        //warp and crop the images
-        super.processFunc();
+    protected void postProcess() {
 
         //perform SSIM process
         //FileInputStream in = new FileInputStream(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/"))
@@ -50,7 +35,7 @@ public class Test01Activity extends TestBaseActivity {
         Rect rect = detectHighlightArea(imgRE2_crop_);
 
         //turn to another activity
-        Intent intent = new Intent(Test01Activity.this, MatActivity.class);
+        Intent intent = new Intent(ImageProc01Activity.this, DisplayResultActivity.class);
 
         //put rect x, y, w, h
         Bundle bundle = new Bundle();

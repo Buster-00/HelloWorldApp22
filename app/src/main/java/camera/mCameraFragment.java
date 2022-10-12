@@ -24,7 +24,7 @@ import androidx.annotation.Nullable;
 
 import com.camerax.lib.CameraFragment;
 
-import org.pytorch.helloworld.TestBaseActivity;
+import org.pytorch.helloworld.ImageProcBaseActivity;
 
 import com.camerax.lib.R;
 
@@ -55,7 +55,8 @@ public class mCameraFragment extends CameraFragment {
         this.isTakeTwo = isTakeTwo;
     }
 
-    Class<?> cls = TestBaseActivity.class;
+    Class<?> cls = ImageProcBaseActivity.class;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
