@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -133,6 +135,8 @@ public class mCameraFragment extends CameraFragment {
                 bitmap = Bitmap.createBitmap(bitmap, 0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
                 ImageView img_view_1 = getActivity().findViewById(org.pytorch.helloworld.R.id.img_view_1);
                 img_view_1.setImageBitmap(bitmap);
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.gradually);
+                img_view_1.startAnimation(animation);
 
                 //store the uri.toString to bundle
                 mbundle.putString(PICTURE_1, uri.toString());
@@ -166,6 +170,8 @@ public class mCameraFragment extends CameraFragment {
                 bitmap = Bitmap.createBitmap(bitmap, 0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
                 ImageView img_view_2 = getActivity().findViewById(org.pytorch.helloworld.R.id.img_view_2);
                 img_view_2.setImageBitmap(bitmap);
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.gradually);
+                img_view_2.startAnimation(animation);
 
                 //store the uri.toString to bundle
                 mbundle.putString(PICTURE_2, uri.toString());
