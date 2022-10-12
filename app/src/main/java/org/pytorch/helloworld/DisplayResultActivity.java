@@ -78,6 +78,7 @@ public class DisplayResultActivity extends AppCompatActivity {
                 Intent intent = new Intent(DisplayResultActivity.this, CropActivity.class);
                 intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
+                finish();
             }
         });
     }

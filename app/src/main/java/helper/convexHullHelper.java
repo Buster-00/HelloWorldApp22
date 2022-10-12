@@ -43,20 +43,25 @@ public class convexHullHelper {
         MatOfPoint hullPointMat = new MatOfPoint();
         ArrayList<Point> hullPointList = new ArrayList<>();
 
+        Rect rect = new Rect(50,50,50,50);
+
         //perform convexHull
-        convexHull(points, hull, true);
+        if(!points.empty()){
 
-        //add points to hullPointList
-        for (int i = 0; i < hull.toList().size(); i++) {
-            hullPointList.add(points.toList().get(hull.toList().get(i)));
+            convexHull(points, hull, true);
+
+            //add points to hullPointList
+            for (int i = 0; i < hull.toList().size(); i++) {
+                hullPointList.add(points.toList().get(hull.toList().get(i)));
+            }
+
+            hullPointMat.fromList(hullPointList);
+
+            //get rectangle
+            rect = boundingRect(hullPointMat);
+
+            Log.e("rect", rect.toString());
         }
-
-        hullPointMat.fromList(hullPointList);
-
-        //get rectangle
-        Rect rect = boundingRect(hullPointMat);
-
-        Log.e("rect", rect.toString());
 
         return rect;
     }

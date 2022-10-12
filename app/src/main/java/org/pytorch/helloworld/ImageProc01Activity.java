@@ -23,7 +23,7 @@ public class ImageProc01Activity extends ImageProcBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    
+
     @Override
     protected void postProcess() {
 

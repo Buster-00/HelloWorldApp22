@@ -469,9 +469,6 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
         ImageCapture.OutputFileOptions outputFileOptions =
                 new ImageCapture.OutputFileOptions.Builder(file).setMetadata(metadata).build();
 
-        //Take first picture
-        closeFlashLight();
-
         mImageCapture.takePicture(outputFileOptions, mExecutor,
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
