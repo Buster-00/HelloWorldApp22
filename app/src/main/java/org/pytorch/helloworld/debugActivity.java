@@ -4,11 +4,11 @@ import static org.pytorch.helloworld.MainActivity.registration;
 import static org.pytorch.helloworld.MainActivity.stringFromJNI;
 import static org.pytorch.helloworld.MainActivity.testForNumcpp;
 import static org.pytorch.helloworld.MainActivity.validate;
-import static org.pytorch.helloworld.Param.HEIGHT;
-import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
-import static org.pytorch.helloworld.Param.MODULE_NAME;
-import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
-import static org.pytorch.helloworld.Param.WIDTH;
+import static helper.Param.HEIGHT;
+import static helper.Param.HEIGHT_OF_BITMAP;
+import static helper.Param.MODULE_NAME;
+import static helper.Param.WIDTH_OF_BITMAP;
+import static helper.Param.WIDTH;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -29,11 +28,8 @@ import org.opencv.core.MatOfKeyPoint;
 import org.opencv.features2d.Features2d;
 import org.opencv.features2d.SIFT;
 import org.opencv.imgproc.Imgproc;
-import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
-import org.pytorch.Tensor;
-import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

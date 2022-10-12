@@ -1,4 +1,4 @@
-package org.pytorch.helloworld;
+package helper;
 
 public class Param {
     public static final String MODULE_NAME = "high_light_detection1.pt";

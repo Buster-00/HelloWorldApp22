@@ -46,11 +46,11 @@ import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.pytorch.helloworld.Param.HEIGHT;
-import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
-import static org.pytorch.helloworld.Param.MODULE_NAME;
-import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
-import static org.pytorch.helloworld.Param.WIDTH;
+import static helper.Param.HEIGHT;
+import static helper.Param.HEIGHT_OF_BITMAP;
+import static helper.Param.MODULE_NAME;
+import static helper.Param.WIDTH_OF_BITMAP;
+import static helper.Param.WIDTH;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

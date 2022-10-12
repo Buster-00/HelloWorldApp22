@@ -1,8 +1,8 @@
 package org.pytorch.helloworld;
 
 import static org.opencv.photo.Photo.fastNlMeansDenoising;
-import static org.pytorch.helloworld.Param.HEIGHT_OF_BITMAP;
-import static org.pytorch.helloworld.Param.WIDTH_OF_BITMAP;
+import static helper.Param.HEIGHT_OF_BITMAP;
+import static helper.Param.WIDTH_OF_BITMAP;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
