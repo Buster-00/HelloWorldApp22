@@ -52,6 +52,9 @@ public class mCameraFragment extends CameraFragment {
     {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
+        //set take two photos or not
+        super.setTakeTwo(true);
+
         //set check button
         view.findViewById(R.id.check).setOnClickListener(new View.OnClickListener() {
             @Override

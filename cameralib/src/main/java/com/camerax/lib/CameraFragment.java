@@ -43,7 +43,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener, On
         OnCameraListener, OnImgAnalysisListener, OnCameraFaceListener {
     private final static String TAG = "CameraFragment";
 
-    private CameraView mCameraView;
+    protected CameraView mCameraView;
 
     //暂不支持include
     //private ViewBinding mViewBinding;
@@ -101,7 +101,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener, On
         mCameraView.setOnCameraListener(this);
         mCameraView.setOnImgAnalysisListener(this);
         mCameraView.setOnCameraFaceListener(this);
-
 
         return view;
     }
@@ -476,5 +475,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener, On
         mFillLightTv.setVisibility(front ? View.GONE : View.VISIBLE);
         setCameraLightBtnStyle();
         setCameraLightItemStyle();
+    }
+
+    protected void setTakeTwo(boolean isTakeTwo){
+        if(mCameraView != null){
+            mCameraView.setTakeTwo(isTakeTwo);
+        }
+
     }
 }

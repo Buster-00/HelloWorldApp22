@@ -12,6 +12,6 @@ public class Camera02Activity extends CameraActivity {
         super.onCreate(savedInstanceState);
         cfg.setOnCheckClass(Test02Activity.class);
         getWindow().setStatusBarColor(getResources().getColor(R.color.white_translucent));//设置状态栏颜色
-        getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 }
