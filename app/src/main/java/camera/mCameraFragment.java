@@ -42,9 +42,16 @@ public class mCameraFragment extends CameraFragment {
 
     ImageView mCheckBtn;
 
+    //is take two photos
+    boolean isTakeTwo = false;
+
     Bundle mbundle;
 
     int pic_counter = 0;
+
+    public mCameraFragment(boolean isTakeTwo) {
+        this.isTakeTwo = isTakeTwo;
+    }
 
     Class<?> cls = TestBaseActivity.class;
     @Override
@@ -53,7 +60,7 @@ public class mCameraFragment extends CameraFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         //set take two photos or not
-        super.setTakeTwo(true);
+        super.setTakeTwo(isTakeTwo);
 
         //set check button
         view.findViewById(R.id.check).setOnClickListener(new View.OnClickListener() {

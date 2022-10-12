@@ -41,7 +41,7 @@ public class CameraActivity extends AppCompatActivity {
 
     //Fragment
     mCameraFragment cfg;
-    
+
     //picture taken counter
     int pic_counter = 0;
 
@@ -61,7 +61,7 @@ public class CameraActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        cfg = new mCameraFragment();
+        cfg = new mCameraFragment(false);
         cfg.setOnCheckClass(Test01Activity.class);
 
         CameraOption option = new CameraOption.Builder(ExAspectRatio.RATIO_16_9)
