@@ -23,6 +23,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
@@ -44,7 +45,9 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static helper.Param.HEIGHT;
 import static helper.Param.HEIGHT_OF_BITMAP;
@@ -104,23 +107,6 @@ public abstract class ImageProcBaseActivity extends AppCompatActivity {
 
         //show process bar
         showProcessBar();
-
-        //bind onClick listener
-        btn_confirm = findViewById(R.id.btn_confirm);
-
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(bm != null){
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    byte[] bytes = out.toByteArray();
-                    Intent intent = new Intent(ImageProcBaseActivity.this, CropActivity.class);
-                    intent.putExtra("bp", bytes);
-                    startActivity(intent);
-                }
-            }
-        });
 
         //Define handler
         mHandler = new Handler(getMainLooper()){
@@ -224,11 +210,16 @@ public abstract class ImageProcBaseActivity extends AppCompatActivity {
         Mat imgRE1_crop = new Mat();
         Mat imgRE2_crop = new Mat();
         
-        int[] coordinates =  Clip(imgHL2.getNativeObjAddr(), imgRE1.getNativeObjAddr(), imgRE2.getNativeObjAddr(),imgRE1_crop.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
-        for(int i : coordinates){
-            Log.e("array", " " + i);
-        }
-        Rect roi = new Rect(new Point(coordinates[2], coordinates[0]), new Point(coordinates[3], coordinates[1]));
+//        int[] coordinates =  Clip(imgHL2.getNativeObjAddr(), imgRE1.getNativeObjAddr(), imgRE2.getNativeObjAddr(),imgRE1_crop.getNativeObjAddr(), imgRE2_crop.getNativeObjAddr());
+//        for(int i : coordinates){
+//            Log.e("array", " " + i);
+//        }
+
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.cvtColor(imgHL2, imgHL2, Imgproc.COLOR_RGB2GRAY);
+        Imgproc.findContours(imgHL2,contours, new Mat(),Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        Point points[] = contours.get(0).toArray();
+        Rect roi = new Rect(points[0], points[2]);
         imgRE1_crop_ = new Mat(imgRE1, roi);
         imgRE2_crop_ = new Mat(imgRE2, roi);
 

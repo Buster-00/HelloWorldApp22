@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.camerax.lib.CameraConstant;
@@ -35,6 +38,10 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        //hide status bar
+        getWindow().setStatusBarColor(getResources().getColor(R.color.white_translucent));//设置状态栏颜色
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         //create bundle to transfer uri.toString
         mbundle = new Bundle();
 
@@ -59,6 +66,9 @@ public class CameraActivity extends AppCompatActivity {
 
         //turn to camera fragment
         ft.replace(R.id.frg_1, cfg).commit();
+
+
+
 
     }
 

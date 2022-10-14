@@ -535,6 +535,12 @@ Java_org_pytorch_helloworld_ResultActivity_user_1mask_1seamlessclone(JNIEnv *env
 
 void mosaic_global_v1(Mat &im1, Mat &im2, nc::NdArray<double> &H, Mat &im1_p, Mat &im2_p)
 {
+    // im1 拍摄的第一张图
+    // im2 拍摄的第二张图
+    // im1_p 是第一张warp后的结果图
+    // im2_p 是第二张warp后的结果图
+    // 该函数处理完毕后，im1是不变的
+    // 该函数处理完毕后，im2改变了，它带出来的是im1 warp后的mask图
     nc::NdArray<double> box2 = nc::NdArray<double>{ {0.0, double(im2.cols) - 1, double(im2.cols) - 1, 0},{0, 0,double(im2.rows) - 1, double(im2.rows) - 1},{1, 1, 1,1} };
     nc::NdArray<double> U;
     nc::NdArray<double> s;

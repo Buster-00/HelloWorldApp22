@@ -53,8 +53,8 @@ public class ResultActivity extends AppCompatActivity {
         //retrieve imgRE1 and imgRE2 from application
         Data_app data_app = (Data_app) getApplication();
         HashMap<String, Mat> hashMap_mats = data_app.getHashMap_Mats();
-        imgRE1 = hashMap_mats.get("imgRE2");
-        imgRE2 = hashMap_mats.get("imgRE1");
+        imgRE1 = hashMap_mats.get("imgRE1");
+        imgRE2 = hashMap_mats.get("imgRE2");
 
         //Convert 8UC4 to 32FC3
 

@@ -78,7 +78,7 @@ public class CropActivity extends AppCompatActivity {
         //get image uri
         Data_app data_app = (Data_app) getApplication();
         HashMap<String, Mat> hashMap_mats = data_app.getHashMap_Mats();
-        Mat imgRE1 = hashMap_mats.get("imgRE2");
+        Mat imgRE1 = hashMap_mats.get("imgRE1");
 
         //set image (imgRE1)
         Bitmap bm = Bitmap.createBitmap(imgRE1.cols(), imgRE1.rows(), Bitmap.Config.ARGB_8888);
