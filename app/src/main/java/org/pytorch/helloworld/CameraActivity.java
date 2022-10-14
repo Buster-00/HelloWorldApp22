@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.camerax.lib.CameraConstant;
@@ -58,6 +59,7 @@ public class CameraActivity extends AppCompatActivity {
 
         //turn to camera fragment
         ft.replace(R.id.frg_1, cfg).commit();
+
     }
 
 }
