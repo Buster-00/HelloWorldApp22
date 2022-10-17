@@ -19,10 +19,12 @@
             android:exported="false" />
         <activity
             android:name=".Camera02Activity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".DisplayResultActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".ResultActivity"
             android:exported="false" />
