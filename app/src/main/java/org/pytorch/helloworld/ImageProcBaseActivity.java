@@ -95,7 +95,7 @@ public abstract class ImageProcBaseActivity extends AppCompatActivity {
     //native funciton
     private native int[] Clip(long im2_small_addr, long im1_p_addr, long im2_p_addr, long im1_crop_addr, long im2_crop_addr);
 
-    private native void exposure_compensator(long im1_p_addr, long im2_p_addr);
+    public static native void exposure_compensator(long im1_p_addr, long im2_p_addr);
 
     //abstract process function
     protected abstract void postProcess();

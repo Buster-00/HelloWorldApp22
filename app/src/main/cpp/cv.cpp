@@ -17,6 +17,7 @@
 #include <opencv2/calib3d.hpp>
 #include "opencv2/photo/photo.hpp"
 #include "opencv2/stitching/detail/exposure_compensate.hpp"
+#include "opencv2/stitching/detail/seam_finders.hpp"
 
 
 using namespace cv;
@@ -736,4 +737,80 @@ Java_org_pytorch_helloworld_ImageProcBaseActivity_exposure_1compensator(JNIEnv *
     //convert umat to mat
     p1.copyTo(im1);
     p2.copyTo(im2);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass clazz, jlong img1_addr,
+                                                        jlong img2_addr, jlong result_addr) {
+    // TODO: implement GraphCutSeamFinder()
+    Mat& canvas1 = *(Mat*)img1_addr;
+    Mat& canvas2 = *(Mat*)img2_addr;
+    Mat& result = *(Mat*)result_addr;
+
+    //将两幅图剪切出来，剪切位置包含了配准（两幅图像的相对位置）信息
+    Mat image1 = canvas1(Range::all(), Range(0, canvas1.cols / 2));
+    Mat image2 = canvas2(Range::all(), Range(canvas2.cols / 4, canvas2.cols * 3 / 4));//假设大概1/2重复区域
+
+    image1.convertTo(image1, CV_32FC3);
+    image2.convertTo(image2, CV_32FC3);
+    image1 /= 255.0;
+    image2 /= 255.0;
+
+    //在找拼缝的操作中，为了减少计算量，用image_small
+    Mat image1_small;
+    Mat image2_small;
+    Size small_size1 = Size(image1.cols / 2, image1.rows / 2);
+    Size small_size2 = Size(image2.cols / 2, image2.rows / 2);
+    resize(image1, image1_small, small_size1);
+    resize(image2, image2_small, small_size2);
+
+    // 左图的左上角坐标
+    cv::Point corner1;
+    corner1.x = 0;
+    corner1.y = 0;
+
+    //右图的左上角坐标
+    cv::Point corner2;
+    corner2.x = image2_small.cols / 2;
+    corner2.y = 0;
+
+    std::vector<cv::Point> corners;
+
+    corners.push_back(corner1);
+    corners.push_back(corner2);
+
+    std::vector<cv::UMat> masks;
+    UMat imageMask1(small_size1, CV_8U);
+    UMat imageMask2(small_size2, CV_8U);
+    imageMask1 = Scalar::all(255);
+    imageMask2 = Scalar::all(255);
+
+    masks.push_back(imageMask1);
+    masks.push_back(imageMask2);
+
+    std::vector<cv::UMat> sources;
+
+    UMat uimg1, uimg2;
+    image1_small.copyTo(uimg1);
+    image2_small.copyTo(uimg2);
+
+    sources.push_back(uimg1);
+    sources.push_back(uimg2);
+
+    Ptr<cv::detail::SeamFinder> seam_finder = new cv::detail::GraphCutSeamFinder(cv::detail::GraphCutSeamFinderBase::COST_COLOR);
+    seam_finder->find(sources, corners, masks);
+
+    //将mask恢复放大
+    resize(masks[0], imageMask1, image1.size());
+    resize(masks[1], imageMask2, image2.size());
+
+    Mat canvas(image1.rows, image1.cols * 3 / 2, CV_32FC3);
+    image1.copyTo(canvas(Range::all(), Range(0, canvas.cols * 2 / 3)), imageMask1);
+    image2.copyTo(canvas(Range::all(), Range(canvas.cols / 3, canvas.cols)), imageMask2);
+    /*canvas *= 255;
+    canvas.convertTo(canvas, CV_8UC3);*/
+
+    //copy to result
+    canvas.copyTo(result);
+
 }

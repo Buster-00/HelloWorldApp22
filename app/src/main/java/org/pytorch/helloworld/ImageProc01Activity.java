@@ -32,7 +32,7 @@ public class ImageProc01Activity extends ImageProcBaseActivity {
         ssimHelper.ssim(imgRE1_crop_, imgRE2_crop_);
 
         //detect high light area with OpenCV technique
-        Rect rect = detectHighlightArea(imgRE2_crop_);
+        Rect rect = detectHighlightArea(imgRE1_crop_);
 
         //turn to another activity
         Intent intent = new Intent(ImageProc01Activity.this, DisplayResultActivity.class);

@@ -49,8 +49,8 @@ public class DisplayResultActivity extends AppCompatActivity {
         Mat imgRE2 = hashMap_mat.get("imgRE2");
 
         //copy
-        Mat imgRE2_cop = new Mat();
-        imgRE2.copyTo(imgRE2_cop);
+        Mat imgRE1_cop = new Mat();
+        imgRE1.copyTo(imgRE1_cop);
 
         int x = getIntent().getExtras().getInt("x");
         int y = getIntent().getExtras().getInt("y");
@@ -58,14 +58,16 @@ public class DisplayResultActivity extends AppCompatActivity {
         int h = getIntent().getExtras().getInt("h");
 
         Rect rect = new Rect(x,y,w,h);
-        rectangle(imgRE2_cop, rect, new Scalar(255,0,0,1), 5);
+
+        //draw rectangle
+        rectangle(imgRE1_cop, rect, new Scalar(255,0,0,1), 5);
 
         //transfer the mat to bitmap
-        Bitmap bm_RE1 = Bitmap.createBitmap(imgRE1.cols(), imgRE1.rows(),Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(imgRE1, bm_RE1);
+        Bitmap bm_RE1 = Bitmap.createBitmap(imgRE1_cop.cols(), imgRE1_cop.rows(),Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(imgRE1_cop, bm_RE1);
 
-        Bitmap bm_RE2 = Bitmap.createBitmap(imgRE2_cop.cols(), imgRE2_cop.rows(),Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(imgRE2_cop, bm_RE2);
+        Bitmap bm_RE2 = Bitmap.createBitmap(imgRE2.cols(), imgRE2.rows(),Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(imgRE2, bm_RE2);
 
 
         //set image view

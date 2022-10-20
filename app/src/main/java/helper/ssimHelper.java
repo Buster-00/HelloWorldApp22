@@ -131,11 +131,12 @@ public class ssimHelper {
         List<MatOfPoint> cnts = new ArrayList<>();
         findContours(thresh, cnts, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_NONE);
 
-        for(MatOfPoint contour : cnts){
+        //draw rectangle
+        /*for(MatOfPoint contour : cnts){
             Rect rect = boundingRect(contour);
             rectangle(i1, rect, new Scalar(0,255,0), 4);
             rectangle(i2, rect, new Scalar(0,255,0), 4);
-        }
+        }*/
 
 
     }
