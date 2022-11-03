@@ -155,19 +155,19 @@ public class debugActivity extends AppCompatActivity {
         //Exposure compensator
         exposure_compensator(imgRE1_crop_.getNativeObjAddr(), imgRE2_crop_.getNativeObjAddr());
 
-        //Graph cut process
-        Imgproc.cvtColor(imgRE1_crop_, imgRE1_crop_, Imgproc.COLOR_BGRA2BGR);
-        Imgproc.cvtColor(imgRE2_crop_, imgRE2_crop_, Imgproc.COLOR_BGRA2BGR);
-
-
-        Mat result = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1_crop_, imgRE2_crop_);
-        result.convertTo(result, CvType.CV_8U, 255.0);
-
-        Bitmap bm = Bitmap.createBitmap(result.width(), result.height(), Bitmap.Config.RGB_565);
-        Utils.matToBitmap(result,bm);
-
-        ImageView imageView = findViewById(R.id.image_view_1);
-        imageView.setImageBitmap(bm);
+//        //Graph cut process
+//        Imgproc.cvtColor(imgRE1_crop_, imgRE1_crop_, Imgproc.COLOR_BGRA2BGR);
+//        Imgproc.cvtColor(imgRE2_crop_, imgRE2_crop_, Imgproc.COLOR_BGRA2BGR);
+//
+//
+//        Mat result = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1_crop_, imgRE2_crop_);
+//        result.convertTo(result, CvType.CV_8U, 255.0);
+//
+//        Bitmap bm = Bitmap.createBitmap(result.width(), result.height(), Bitmap.Config.RGB_565);
+//        Utils.matToBitmap(result,bm);
+//
+//        ImageView imageView = findViewById(R.id.image_view_1);
+//        imageView.setImageBitmap(bm);
 
     }
     /**

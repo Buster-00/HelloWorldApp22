@@ -23,6 +23,12 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.HashMap;
 
+import helper.GraphCutSeamFinderHelper;
+
+/*
+* this class process the final result of the image
+* */
+
 public class ResultActivity extends AppCompatActivity {
 
     public native void user_mask_seamlessclone(long im1_p_addr, long im2_p_addr, long des_addr, int x, int y, int width, int height);
@@ -62,8 +68,10 @@ public class ResultActivity extends AppCompatActivity {
         //Convert 8UC4 to 32FC3
 
         //Seamless clone
-        Mat result = user_mask_seamlessClone_java(imgRE1, imgRE2,
-                x, y, width, height);
+        //Mat result = user_mask_seamlessClone_java(imgRE1, imgRE2, x, y, width, height);
+
+        //graph cut seamfinder
+        Mat result = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
 
         //Bilateral Filter
         Mat temp = new Mat();
@@ -100,4 +108,6 @@ public class ResultActivity extends AppCompatActivity {
 
         return result;
     }
+
+
 }

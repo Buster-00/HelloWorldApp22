@@ -24,6 +24,13 @@ using namespace cv;
 using namespace nc;
 using namespace std;
 
+enum GRAPH_CUT_TYPE {
+    VERTICAL_UP,
+    VERTICAL_DOWN,
+    HORIZENTAL_LEFT,
+    HORIZENTAL_RIGHT
+};
+
 extern "C"  JNIEXPORT jstring JNICALL
 Java_org_pytorch_helloworld_MainActivity_stringFromJNI( JNIEnv *env, jobject thiz){
 //    char *hello = "hello test...";
@@ -738,18 +745,45 @@ Java_org_pytorch_helloworld_ImageProcBaseActivity_exposure_1compensator(JNIEnv *
     p1.copyTo(im1);
     p2.copyTo(im2);
 }
-extern "C"
-JNIEXPORT void JNICALL
-Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass clazz, jlong img1_addr,
-                                                        jlong img2_addr, jlong result_addr) {
-    // TODO: implement GraphCutSeamFinder()
-    Mat& canvas1 = *(Mat*)img1_addr;
-    Mat& canvas2 = *(Mat*)img2_addr;
-    Mat& result = *(Mat*)result_addr;
+
+
+
+UMat GraphCutSeamFinderHelper_v2(const Mat& canvas1, const Mat& canvas2, const int& x, const int& y, const int& length, const int& type) {
 
     //将两幅图剪切出来，剪切位置包含了配准（两幅图像的相对位置）信息
-    Mat image1 = canvas1(Range::all(), Range(0, canvas1.cols / 2));
-    Mat image2 = canvas2(Range::all(), Range(canvas2.cols / 4, canvas2.cols * 3 / 4));//假设大概1/2重复区域
+    /*Mat image1 = canvas1(Range::all(), Range(0, canvas1.cols / 2));
+    Mat image2 = canvas2(Range::all(), Range(canvas2.cols / 4, canvas2.cols * 3 / 4));//假设大概1/2重复区域*/
+
+    Mat image1;
+    Mat image2;
+
+    switch (type)
+    {
+        case HORIZENTAL_LEFT:
+            image1 = canvas1(Range(y, y + length), Range(x, x + length));
+            image2 = canvas2(Range(y, y + length), Range(x - length / 2, x + length / 2));
+            break;
+
+        case HORIZENTAL_RIGHT:
+            image1 = canvas1(Range(y, y + length), Range(x, x + length));
+            image2 = canvas2(Range(y, y + length), Range(x + length / 2, x + length / 2 + length));
+            break;
+
+        case VERTICAL_UP:
+            image1 = canvas1(Range(y, y + length), Range(x, x + length));
+            image2 = canvas2(Range(y - length / 2, y + length / 2), Range(x, x  + length));
+            break;
+
+        case VERTICAL_DOWN:
+            image1 = canvas1(Range(y, y + length), Range(x, x + length));
+            image2 = canvas2(Range(y + length / 2, y + length / 2 + length), Range(x, x + length));
+            break;
+
+        default:
+            break;
+    }
+
+
 
     image1.convertTo(image1, CV_32FC3);
     image2.convertTo(image2, CV_32FC3);
@@ -766,13 +800,41 @@ Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass c
 
     // 左图的左上角坐标
     cv::Point corner1;
-    corner1.x = 0;
-    corner1.y = 0;
 
     //右图的左上角坐标
     cv::Point corner2;
-    corner2.x = image2_small.cols / 2;
-    corner2.y = 0;
+
+    switch (type)
+    {
+        case GRAPH_CUT_TYPE::HORIZENTAL_LEFT:
+            corner1.x = image1_small.cols / 2;
+            corner1.y = 0;
+            corner2.x = 0;
+            corner2.y = 0;
+            break;
+        case GRAPH_CUT_TYPE::HORIZENTAL_RIGHT:
+            corner1.x = 0;
+            corner1.y = 0;
+            corner2.x = image1_small.cols / 2;
+            corner2.y = 0;
+            break;
+        case GRAPH_CUT_TYPE::VERTICAL_UP:
+            corner1.x = 0;
+            corner1.y = image1_small.rows / 2;
+            corner2.x = 0;
+            corner2.y = 0;
+            break;
+        case GRAPH_CUT_TYPE::VERTICAL_DOWN:
+            corner1.x = 0;
+            corner1.y = 0;
+            corner2.x = 0;
+            corner2.y = image1_small.rows / 2;
+            break;
+        default:
+            break;
+    }
+
+
 
     std::vector<cv::Point> corners;
 
@@ -804,13 +866,83 @@ Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass c
     resize(masks[0], imageMask1, image1.size());
     resize(masks[1], imageMask2, image2.size());
 
-    Mat canvas(image1.rows, image1.cols * 3 / 2, CV_32FC3);
-    image1.copyTo(canvas(Range::all(), Range(0, canvas.cols * 2 / 3)), imageMask1);
-    image2.copyTo(canvas(Range::all(), Range(canvas.cols / 3, canvas.cols)), imageMask2);
+
+    int width = 0;
+    int height = 0;
+    Mat canvas;
+    switch (type)
+    {
+        case HORIZENTAL_LEFT:
+            canvas = Mat(image1.rows, image1.cols * 3 / 2, CV_32FC3);
+            image1.copyTo(canvas(Range::all(), Range(canvas.cols / 3, canvas.cols)), imageMask1);
+            image2.copyTo(canvas(Range::all(), Range(0, canvas.cols * 2 / 3)), imageMask2);
+            break;
+        case HORIZENTAL_RIGHT:
+            canvas = Mat(image1.rows, image1.cols * 3 / 2, CV_32FC3);
+            image1.copyTo(canvas(Range::all(), Range(0, canvas.cols * 2 / 3)), imageMask1);
+            image2.copyTo(canvas(Range::all(), Range(canvas.cols / 3, canvas.cols)), imageMask2);
+            break;
+        case VERTICAL_UP:
+            canvas = Mat(image1.rows * 3 / 2, image1.cols, CV_32FC3);
+            image1.copyTo(canvas(Range(canvas.rows / 3, canvas.rows), Range::all()), imageMask1);
+            image2.copyTo(canvas(Range(0, canvas.rows * 2 / 3), Range::all()), imageMask2);
+            break;
+        case VERTICAL_DOWN:
+            canvas = Mat(image1.rows * 3 / 2, image1.cols, CV_32FC3);
+            image1.copyTo(canvas(Range(0, canvas.rows * 2 / 3), Range::all()), imageMask1);
+            image2.copyTo(canvas(Range(canvas.rows / 3, canvas.rows), Range::all()), imageMask2);
+            break;
+        default:
+            break;
+    }
+
     /*canvas *= 255;
     canvas.convertTo(canvas, CV_8UC3);*/
+    switch (type)
+    {
+        case GRAPH_CUT_TYPE::HORIZENTAL_LEFT:
+        case GRAPH_CUT_TYPE::VERTICAL_UP:
+            return imageMask1;
+            break;
 
-    //copy to result
-    canvas.copyTo(result);
+        case GRAPH_CUT_TYPE::HORIZENTAL_RIGHT:
+        case GRAPH_CUT_TYPE::VERTICAL_DOWN:
+            return imageMask1;
+        default:
+            return imageMask2;
+    }
 
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass clazz, jlong img1_addr,
+                                                           jlong img2_addr, jlong result_addr, int x, int y, int LENGTH) {
+    // TODO: implement GraphCutSeamFinder()
+    Mat& canvas1 = *(Mat*)img1_addr;
+    Mat& canvas2 = *(Mat*)img2_addr;
+    Mat& result = *(Mat*)result_addr;
+
+    //Src_1 is the highlight image
+    //Src_2 is the image used to replace the highlight area
+    Rect rect(x, y, LENGTH, LENGTH);
+    Mat src_1 = canvas1;
+    Mat src_2 = canvas2;
+    rectangle(src_1, rect, Scalar(0, 255, 255), 3);
+
+    UMat mask1 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::HORIZENTAL_LEFT);
+    UMat mask2 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::VERTICAL_UP);
+    UMat mask3 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::HORIZENTAL_RIGHT);
+    UMat mask4 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::VERTICAL_DOWN);
+
+    UMat maskAll = mask1.mul(mask2);
+    maskAll = maskAll.mul(mask3);
+    maskAll = maskAll.mul(mask4);
+    //merge the mask
+
+    //replace the higglight area
+    //return the value as result
+    Mat temp = src_2(Range(y, y + LENGTH), Range(x, x + LENGTH));
+    temp.copyTo(src_1(Range(y, y + LENGTH), Range(x, x + LENGTH)), maskAll);
+    src_1.copyTo(result);
 }
