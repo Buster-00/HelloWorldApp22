@@ -928,21 +928,48 @@ Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass c
     Rect rect(x, y, LENGTH, LENGTH);
     Mat src_1 = canvas1;
     Mat src_2 = canvas2;
-    rectangle(src_1, rect, Scalar(0, 255, 255), 3);
 
-    UMat mask1 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::HORIZENTAL_LEFT);
-    UMat mask2 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::VERTICAL_UP);
-    UMat mask3 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::HORIZENTAL_RIGHT);
-    UMat mask4 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::VERTICAL_DOWN);
+
+    Size mSize(LENGTH, LENGTH);
+    UMat mask1(mSize, CV_8U);
+    mask1 = Scalar::all(255);
+
+    UMat mask2(mSize, CV_8U);
+    mask2 = Scalar::all(255);
+
+    UMat mask3(mSize, CV_8U);
+    mask3 = Scalar::all(255);
+
+    UMat mask4(mSize, CV_8U);
+    mask4 = Scalar::all(255);
+
+    if(x - LENGTH / 2 >= 0)
+        UMat mask1 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::HORIZENTAL_LEFT);
+    if(y - LENGTH / 2 >= 0)
+        UMat mask2 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::VERTICAL_UP);
+    if(x + LENGTH / 2 + LENGTH <= 386)
+        UMat mask3 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::HORIZENTAL_RIGHT);
+    if(y + LENGTH / 2 + LENGTH <= 512)
+        UMat mask4 = GraphCutSeamFinderHelper_v2(src_1, src_2, x, y, LENGTH, GRAPH_CUT_TYPE::VERTICAL_DOWN);
 
     UMat maskAll = mask1.mul(mask2);
     maskAll = maskAll.mul(mask3);
     maskAll = maskAll.mul(mask4);
+    UMat maskAll_(src_1.rows, src_1.cols, CV_8U);
+    maskAll_ = Scalar::all(0);
+    maskAll.copyTo(maskAll_(Range(y, y + LENGTH), Range(x, x + LENGTH)));
     //merge the mask
 
-    //replace the higglight area
+    //replace the highlight area
     //return the value as result
     Mat temp = src_2(Range(y, y + LENGTH), Range(x, x + LENGTH));
-    temp.copyTo(src_1(Range(y, y + LENGTH), Range(x, x + LENGTH)), maskAll);
-    src_1.copyTo(result);
+    Mat temp_;
+    src_1.copyTo(temp_);
+    temp.copyTo(temp_(Range(y, y + LENGTH), Range(x, x + LENGTH)), maskAll);
+
+    //seamless clone
+    //泊松融合
+    Point center(x + LENGTH / 2, y + LENGTH / 2);
+    seamlessClone(src_2, src_1, maskAll_, center, result , 1);
+    temp_.copyTo(result);
 }
