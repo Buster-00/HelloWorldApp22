@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/black_translucent"
-    tools:context=".CameraActivity">
+    tools:context=".Camera01Activity">
 
     <FrameLayout
         android:id="@+id/frg_1"

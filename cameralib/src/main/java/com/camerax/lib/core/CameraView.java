@@ -595,20 +595,20 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
 
     @Override
     public void switchFace() {
-        if (mCameraParam.faceFront) {
-            mCameraParam.faceFront = false;
-        } else {
-            mCameraParam.faceFront = true;
-        }
-
-        if (mCameraParam.lightState == IFlashLight.FILL) {
-            mCameraParam.lightState = IFlashLight.AUTO;
-        }
-
+//        if (mCameraParam.faceFront) {
+//            mCameraParam.faceFront = false;
+//        } else {
+//            mCameraParam.faceFront = true;
+//        }
+//
+//        if (mCameraParam.lightState == IFlashLight.FILL) {
+//            mCameraParam.lightState = IFlashLight.AUTO;
+//        }
+//
         if (mOnCameraFaceListener != null) {
             mOnCameraFaceListener.onSwitchCamera(mCameraParam.faceFront);
         }
-        reset();
+//        reset();
     }
 
     @Override

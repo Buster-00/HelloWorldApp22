@@ -19,7 +19,7 @@ import org.opencv.core.Scalar;
 
 import java.util.HashMap;
 
-public class DisplayResultActivity extends AppCompatActivity {
+public class ProcResultActivity extends AppCompatActivity {
 
     //widget
     ImageView imageView_1;
@@ -38,9 +38,7 @@ public class DisplayResultActivity extends AppCompatActivity {
 
         //Initialize widgets
         imageView_1 = findViewById(R.id.imageView_1);
-
         imageView_2 = findViewById(R.id.imageView_2);
-
 
         //get mat vector
         Data_app data_app = (Data_app) getApplication();
@@ -79,10 +77,10 @@ public class DisplayResultActivity extends AppCompatActivity {
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DisplayResultActivity.this, CropActivity.class);
+                Intent intent = new Intent(ProcResultActivity.this, CropActivity.class);
                 intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
     }
