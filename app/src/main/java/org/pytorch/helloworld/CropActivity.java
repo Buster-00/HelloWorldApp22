@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 
 import com.edmodo.cropper.CropImageView;
 
@@ -68,7 +69,6 @@ public class CropActivity extends AppCompatActivity {
 
 
         //cropImageView.mPressedHandle.updateCropWindow(10,10,cropImageView.mBitmapRect, cropImageView.mSnapRadius);
-
         //get image uri
         Data_app data_app = (Data_app) getApplication();
         HashMap<String, Mat> hashMap_mats = data_app.getHashMap_Mats();

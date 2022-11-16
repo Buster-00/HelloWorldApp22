@@ -28,8 +28,7 @@ public class Camera02Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-
+        setContentView(R.layout.activity_camera02);
         //create bundle to transfer uri.toString
         mbundle = new Bundle();
 

@@ -21,16 +21,16 @@
             android:layout_marginVertical="10dp"
             android:layout_weight="1">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btn_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
-                android:backgroundTint="@color/colorPrimary"
-                android:src="@drawable/ic_baseline_insert_photo_24"
-                android:textColor="@color/cardview_light_background"
-                app:fabCustomSize="100dp" />
+<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                android:id="@+id/btn_default"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:backgroundTint="@color/colorPrimary"-->
+<!--                android:src="@drawable/ic_baseline_insert_photo_24"-->
+<!--                android:textColor="@color/cardview_light_background"-->
+<!--                app:fabCustomSize="100dp" />-->
 
         </FrameLayout>
 
@@ -49,6 +49,7 @@
                 android:layout_margin="10dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:src="@drawable/ic_baseline_camera_alt_24"
+                
                 android:textColor="@color/cardview_light_background"
                 app:fabCustomSize="100dp" />
 
@@ -61,16 +62,17 @@
             android:layout_marginVertical="10dp"
             android:layout_weight="1">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btn_debug"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:backgroundTint="@color/colorPrimary"
-                android:src="@drawable/ic_baseline_bug_report_24"
-                android:textColor="@color/cardview_light_background"
-                app:fabCustomSize="100dp" />
+<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                                -->
+<!--                android:id="@+id/btn_debug"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:backgroundTint="@color/colorPrimary"-->
+<!--                android:src="@drawable/ic_baseline_bug_report_24"-->
+<!--                android:textColor="@color/cardview_light_background"-->
+<!--                app:fabCustomSize="100dp" />-->
 
 
         </FrameLayout>

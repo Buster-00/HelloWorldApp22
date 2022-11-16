@@ -28,19 +28,19 @@ public class InitActivity extends AppCompatActivity {
         requestPermission();
 
         //initialize widgets
-        FloatingActionButton btn_default = findViewById(R.id.btn_default);
+        //FloatingActionButton btn_default = findViewById(R.id.btn_default);
         FloatingActionButton btn_camera = findViewById(R.id.btn_camera);
-        FloatingActionButton btn_debug = findViewById(R.id.btn_debug);
+        //FloatingActionButton btn_debug = findViewById(R.id.btn_debug);
         FloatingActionButton btn_camera02 = findViewById(R.id.btn_camera02);
 
         //Bind onClick function
-        btn_default.setOnClickListener(new View.OnClickListener() {
+        /*btn_default.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(InitActivity.this, MainActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         btn_camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,13 +50,13 @@ public class InitActivity extends AppCompatActivity {
             }
         });
 
-        btn_debug.setOnClickListener(new View.OnClickListener() {
+        /*btn_debug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(InitActivity.this, debugActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         btn_camera02.setOnClickListener(new View.OnClickListener() {
             @Override
