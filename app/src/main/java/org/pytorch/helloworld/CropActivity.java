@@ -1,43 +1,26 @@
 package org.pytorch.helloworld;
 
-import static camera.mCameraFragment.PICTURE_1;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.edmodo.cropper.CropImageView;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
-import org.pytorch.helloworld.R;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
-import javax.xml.transform.Result;
-
-import camera.CameraParam;
 import crop.OnCropListener;
-import crop.mCropImagheView;
 
 public class CropActivity extends AppCompatActivity {
 
@@ -114,7 +97,7 @@ public class CropActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bitmap croppedImage = cropImageView.getCroppedImage();
-                Intent intent = new Intent(CropActivity.this, ResultActivity.class);
+                Intent intent = new Intent(CropActivity.this, FinalResultActivity.class);
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 byte[] bitmapByte = out.toByteArray();

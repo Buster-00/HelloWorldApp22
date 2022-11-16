@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -472,9 +473,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener, On
 
     @Override
     public void onSwitchCamera(boolean front) {
-        mFillLightTv.setVisibility(front ? View.GONE : View.VISIBLE);
+        /*mFillLightTv.setVisibility(front ? View.GONE : View.VISIBLE);
         setCameraLightBtnStyle();
-        setCameraLightItemStyle();
+        setCameraLightItemStyle();*/
     }
 
     protected void setTakeTwo(boolean isTakeTwo){

@@ -29,7 +29,7 @@ import helper.GraphCutSeamFinderHelper;
 * this class process the final result of the image
 * */
 
-public class ResultActivity extends AppCompatActivity {
+public class FinalResultActivity extends AppCompatActivity {
 
     public native void user_mask_seamlessclone(long im1_p_addr, long im2_p_addr, long des_addr, int x, int y, int width, int height);
 

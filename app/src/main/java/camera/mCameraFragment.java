@@ -97,7 +97,18 @@ public class mCameraFragment extends CameraFragment {
 
     @Override
     public void onSwitchCamera(boolean front) {
-        getActivity().recreate();
+        //reset the pictures
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.gradually);
+
+        ImageView img_view_1 = getActivity().findViewById(org.pytorch.helloworld.R.id.img_view_1);
+        img_view_1.setImageResource(org.pytorch.helloworld.R.drawable.ic_launcher_foreground);
+        img_view_1.startAnimation(animation);
+
+        ImageView img_view_2 = getActivity().findViewById(org.pytorch.helloworld.R.id.img_view_2);
+        img_view_2.setImageResource(org.pytorch.helloworld.R.drawable.ic_launcher_foreground);
+        img_view_2.startAnimation(animation);
+
+        pic_counter = 0;
     }
 
     @Override

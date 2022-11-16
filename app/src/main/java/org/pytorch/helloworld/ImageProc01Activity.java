@@ -35,7 +35,7 @@ public class ImageProc01Activity extends ImageProcBaseActivity {
         Rect rect = detectHighlightArea(imgRE1_crop_);
 
         //turn to another activity
-        Intent intent = new Intent(ImageProc01Activity.this, DisplayResultActivity.class);
+        Intent intent = new Intent(ImageProc01Activity.this, ProcResultActivity.class);
 
         //put rect x, y, w, h
         Bundle bundle = new Bundle();

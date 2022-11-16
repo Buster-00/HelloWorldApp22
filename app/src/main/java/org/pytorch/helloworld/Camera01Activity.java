@@ -18,7 +18,7 @@ import com.camerax.lib.core.ExAspectRatio;
 import camera.mCameraFragment;
 
 
-public class CameraActivity extends AppCompatActivity {
+public class Camera01Activity extends AppCompatActivity {
 
     //bundle to transfer uri.toString
     protected Bundle mbundle;
@@ -66,10 +66,6 @@ public class CameraActivity extends AppCompatActivity {
 
         //turn to camera fragment
         ft.replace(R.id.frg_1, cfg).commit();
-
-
-
-
     }
 
 }

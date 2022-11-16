@@ -488,11 +488,11 @@ Java_org_pytorch_helloworld_MainActivity_registration( JNIEnv *env, jobject thiz
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_org_pytorch_helloworld_ResultActivity_user_1mask_1seamlessclone(JNIEnv *env, jobject thiz,
-                                                                     jlong im1_p_addr,
-                                                                     jlong im2_p_addr,
-                                                                     jlong des_addr, jint x, jint y,
-                                                                     jint width, jint height) {
+Java_org_pytorch_helloworld_FinalResultActivity_user_1mask_1seamlessclone(JNIEnv *env, jobject thiz,
+                                                                          jlong im1_p_addr,
+                                                                          jlong im2_p_addr,
+                                                                          jlong des_addr, jint x, jint y,
+                                                                          jint width, jint height) {
     Mat& im1_p = *(Mat*)im1_p_addr;
     Mat& im2_p = *(Mat*)im2_p_addr;
 
