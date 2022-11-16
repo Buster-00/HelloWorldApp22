@@ -67,11 +67,16 @@ public class ResultActivity extends AppCompatActivity {
 
         //Convert 8UC4 to 32FC3
 
+        boolean isUsingGraphCut = getIntent().getBooleanExtra("isUsingGraphCut", false);
+        Mat result;
         //Seamless clone
-        //Mat result = user_mask_seamlessClone_java(imgRE1, imgRE2, x, y, width, height);
-
-        //graph cut seamfinder
-        Mat result = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
+        if(isUsingGraphCut){
+            //graph cut seamfinder
+            result = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
+        }
+        else{
+            result = user_mask_seamlessClone_java(imgRE1, imgRE2, x, y, width, height);
+        }
 
         //Bilateral Filter
         Mat temp = new Mat();

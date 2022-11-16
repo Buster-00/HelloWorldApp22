@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.edmodo.cropper.CropImageView;
@@ -43,9 +44,11 @@ public class CropActivity extends AppCompatActivity {
     //coordinates
     String coordinates;
     int x, y, width, height;
+    boolean isUsingGraphCut = false;
 
     //widget
     CropImageView cropImageView;
+    Switch sw_graphCut;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -58,8 +61,16 @@ public class CropActivity extends AppCompatActivity {
 
         //Initialize widget
         cropImageView = findViewById(R.id.crop_view);
+        sw_graphCut = findViewById(R.id.switch1);
         RelativeLayout relativeLayout = findViewById(R.id.Layout_relative);
         Log.e("width", ""+relativeLayout.getWidth());
+
+        sw_graphCut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isUsingGraphCut = !isUsingGraphCut;
+            }
+        });
 
         //get rect x, y, w, h
         x = getIntent().getIntExtra("x",0);
@@ -113,6 +124,7 @@ public class CropActivity extends AppCompatActivity {
                 intent.putExtra("y", y);
                 intent.putExtra("width", width);
                 intent.putExtra("height", height);
+                intent.putExtra("isUsingGraphCut", isUsingGraphCut);
                 startActivity(intent);
             }
         });
