@@ -517,6 +517,8 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
                                 if (mOnCameraListener != null) {
                                     mOnCameraListener.onTaken(result);
                                 }
+
+                                closeFlashLight();
                             }
 
                             @Override
@@ -525,9 +527,9 @@ public class CameraView extends CameraPreview implements ICamera, IFlashLight,
                                 Toast.makeText(mContext, R.string.take_photo_fail, Toast.LENGTH_SHORT).show();
                             }
                         });
+
             }
         }, 1600);
-
     }
 
     /**
