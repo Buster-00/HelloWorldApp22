@@ -23,6 +23,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.HashMap;
 
+import helper.GradientMaskHelper;
 import helper.GraphCutSeamFinderHelper;
 
 /*
@@ -64,13 +65,17 @@ public class FinalResultActivity extends AppCompatActivity {
         HashMap<String, Mat> hashMap_mats = data_app.getHashMap_Mats();
         imgRE1 = hashMap_mats.get("imgRE1");
         imgRE2 = hashMap_mats.get("imgRE2");
-
-        //Convert 8UC4 to 32FC3
-
+        
+        //get boolean
         boolean isUsingGraphCut = getIntent().getBooleanExtra("isUsingGraphCut", false);
-        Mat result;
+        boolean isUsingGradientMask = getIntent().getBooleanExtra("isUsingGradientMask", false);
+        Mat result = null;
+
         //Seamless clone
-        if(isUsingGraphCut){
+        if(isUsingGradientMask){
+            result = GradientMaskHelper.GenerateMask(imgRE1, imgRE2,imgRE1.rows(), imgRE1.cols());
+        }
+        else if(isUsingGraphCut){
             //graph cut seamfinder
             result = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
         }

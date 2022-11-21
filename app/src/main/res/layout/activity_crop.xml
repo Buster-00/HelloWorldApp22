@@ -33,5 +33,15 @@
       android:text="GraphCut"
       android:visibility="visible" />
 
+  <Switch
+      android:id="@+id/switch2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/switch1"
+      android:layout_centerHorizontal="true"
+      android:text="渐变遮罩"
+      android:visibility="visible" />
+
+
 
 </RelativeLayout>

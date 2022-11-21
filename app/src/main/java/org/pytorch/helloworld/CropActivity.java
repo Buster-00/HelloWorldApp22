@@ -29,10 +29,12 @@ public class CropActivity extends AppCompatActivity {
     String coordinates;
     int x, y, width, height;
     boolean isUsingGraphCut = false;
+    boolean isUsingGradientMask = false;
 
     //widget
     CropImageView cropImageView;
     Switch sw_graphCut;
+    Switch sw_gradientMask;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -46,6 +48,7 @@ public class CropActivity extends AppCompatActivity {
         //Initialize widget
         cropImageView = findViewById(R.id.crop_view);
         sw_graphCut = findViewById(R.id.switch1);
+        sw_gradientMask = findViewById(R.id.switch2);
         RelativeLayout relativeLayout = findViewById(R.id.Layout_relative);
         Log.e("width", ""+relativeLayout.getWidth());
 
@@ -53,6 +56,13 @@ public class CropActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 isUsingGraphCut = !isUsingGraphCut;
+            }
+        });
+
+        sw_gradientMask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isUsingGradientMask = !isUsingGradientMask;
             }
         });
 
@@ -108,6 +118,7 @@ public class CropActivity extends AppCompatActivity {
                 intent.putExtra("width", width);
                 intent.putExtra("height", height);
                 intent.putExtra("isUsingGraphCut", isUsingGraphCut);
+                intent.putExtra("isUsingGradientMask", isUsingGradientMask);
                 startActivity(intent);
             }
         });
