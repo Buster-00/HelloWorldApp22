@@ -73,7 +73,10 @@ public class FinalResultActivity extends AppCompatActivity {
 
         //Seamless clone
         if(isUsingGradientMask){
-            result = GradientMaskHelper.GenerateMask(imgRE1, imgRE2,imgRE1.rows(), imgRE1.cols());
+            int CenterX = x + width / 2;
+            int CenterY = y + height / 2;
+            int radius = (width > height ? (width / 2) : (height / 2));
+            result = GradientMaskHelper.GenerateMask(imgRE1, imgRE2,imgRE1.rows(), imgRE1.cols(), CenterX, CenterY, radius);
         }
         else if(isUsingGraphCut){
             //graph cut seamfinder

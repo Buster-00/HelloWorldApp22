@@ -44,7 +44,9 @@
             android:name=".Camera01Activity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".InitActivity">
+        <activity
+            android:name=".InitActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
