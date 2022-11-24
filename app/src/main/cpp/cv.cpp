@@ -917,11 +917,12 @@ UMat GraphCutSeamFinderHelper_v2(const Mat& canvas1, const Mat& canvas2, const i
 extern "C"
 JNIEXPORT void JNICALL
 Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass clazz, jlong img1_addr,
-                                                           jlong img2_addr, jlong result_addr, int x, int y, int LENGTH) {
+                                                           jlong img2_addr, jlong result_addr, jlong mask_addr, int x, int y, int LENGTH) {
     // TODO: implement GraphCutSeamFinder()
     Mat& canvas1 = *(Mat*)img1_addr;
     Mat& canvas2 = *(Mat*)img2_addr;
     Mat& result = *(Mat*)result_addr;
+    Mat& mask = *(Mat*)mask_addr;
 
     //Src_1 is the highlight image
     //Src_2 is the image used to replace the highlight area
@@ -971,5 +972,6 @@ Java_helper_GraphCutSeamFinderHelper_GraphCutSeamFinder_1C(JNIEnv *env, jclass c
     //泊松融合
     Point center(x + LENGTH / 2, y + LENGTH / 2);
     seamlessClone(src_2, src_1, maskAll_, center, result , 1);
+    maskAll_.copyTo(mask);
     temp_.copyTo(result);
 }

@@ -70,7 +70,7 @@ public class FinalResultActivity extends AppCompatActivity {
         boolean isUsingGraphCut = getIntent().getBooleanExtra("isUsingGraphCut", false);
         boolean isUsingGradientMask = getIntent().getBooleanExtra("isUsingGradientMask", false);
         Mat result = null;
-
+        Mat[] results;
         //Seamless clone
         if(isUsingGradientMask){
             int CenterX = x + width / 2;
@@ -80,7 +80,8 @@ public class FinalResultActivity extends AppCompatActivity {
         }
         else if(isUsingGraphCut){
             //graph cut seamfinder
-            result = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
+            results = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
+            result = results[0];
         }
         else{
             result = user_mask_seamlessClone_java(imgRE1, imgRE2, x, y, width, height);
