@@ -14,7 +14,7 @@ import org.opencv.core.Scalar;
 
 public class GradientMaskHelper {
 
-    private static int STRENGTH = 800;
+    private static int STRENGTH = 1000;
 
     //增加图像模糊遮罩
     private static Mat add_mask_xy(Mat img, int centerX, int centerY, int strength, int radius){
@@ -56,7 +56,7 @@ public class GradientMaskHelper {
         return img;
     }
 
-    public static Mat GradientMaskMaker(Mat img1, Mat img2, int CenterX, int CenterY){
+    private static Mat GradientMaskMaker(Mat img1, Mat img2, int CenterX, int CenterY){
         //加上遮罩
         return add_mask_xy(img1, CenterX, CenterY, 200, 50);
     }

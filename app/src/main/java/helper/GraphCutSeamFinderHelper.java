@@ -31,4 +31,26 @@ public class GraphCutSeamFinderHelper {
         GraphCutSeamFinder_C(img1.getNativeObjAddr(), img2.getNativeObjAddr(), new Mat().getNativeObjAddr(), mask.getNativeObjAddr(),  x, y, LENGTH);
         return mask;
     }
+
+    public static Mat[] GraphCutSeamFinder_v2(Mat img1, Mat img2, int x, int y, int LENGTH){
+        Mat result = new Mat();
+        Mat mask = new Mat();
+
+        //using native function graphcutSeamFinder
+        GraphCutSeamFinder_C(img1.getNativeObjAddr(), img2.getNativeObjAddr(), result.getNativeObjAddr(), mask.getNativeObjAddr(), x, y, LENGTH);
+
+        //gradientmask
+        result = GradientMaskHelper.GenerateMask(img1, img2, img1.rows(), img1.cols(), x + LENGTH / 2, y + LENGTH / 2, LENGTH / 2);
+
+        //seamless clone for the result
+//        Point center = new Point(x + (LENGTH / 2), y + (LENGTH / 2));
+//        seamlessClone(img2, img1, mask, center, result, MIXED_CLONE);
+
+
+        Mat[] results = new Mat[2];
+        results[0] = result;
+        results[1] = mask;
+        return results;
+    }
+
 }

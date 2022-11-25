@@ -80,7 +80,8 @@ public class FinalResultActivity extends AppCompatActivity {
         }
         else if(isUsingGraphCut){
             //graph cut seamfinder
-            results = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
+            //results = GraphCutSeamFinderHelper.GraphCutSeamFinder(imgRE1, imgRE2, x,y, (Math.max(width, height)));
+            results = GraphCutSeamFinderHelper.GraphCutSeamFinder_v2(imgRE1, imgRE2, x,y, (Math.max(width, height)));
             result = results[0];
         }
         else{
